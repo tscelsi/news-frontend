@@ -14,7 +14,7 @@ type Props = {
 
 const ArticleLink = ({ children, article, isSelected, labellingCategory, labellingEnabled, ...rest }: Props) => {
   return (
-    <div {...rest} className={classNames("font-satoshi w-full flex gap-4 border-4 items-center rounded-xl border-black px-4 py-2 shadow-none transition-shadow", {
+    <div {...rest} className={classNames("font-satoshi bg-white w-full flex gap-4 border-4 items-center rounded-xl border-black px-4 py-2 shadow-none transition-shadow", {
       // non-labelling styles
       "hover:shadow-blak": !labellingEnabled,
       // labelling styles

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Layout = ({ children }: React.PropsWithChildren) => {
   return (
-    <div className="font-serif">{children}</div>
+    <div className="bg-[#F43F5E]">{children}</div>
   )
 }
 

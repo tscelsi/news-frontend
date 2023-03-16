@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import Layout from "~/components/Layout";
 import ArticleLink from '~/components/ArticleLink';
 import Label from '~/components/Label';
+import Navbar from '~/components/Navbar';
 
 
 export type LabelType = "SAME_EVENT" | "SAME_STORY" | "SAME_TOPIC" | "DIFFERENT";
@@ -32,8 +33,11 @@ const Home: NextPage = () => {
 	}
 
 	return (
-		<Layout>
-			<button onClick={() => toggleLabelling(!labellingEnabled)}>toggle labelling {!labellingEnabled ? "on" : "off"}</button>
+		<div className={classNames("min-h-screen", {
+			"bg-[#F43F5E]": !labellingEnabled,
+			"bg-white": labellingEnabled,
+		})}>
+			<Navbar toggleLabelling={toggleLabelling} labellingEnabled={labellingEnabled} />
 			<div className="flex flex-col items-center justify-start">
 				{/* <button onClick={() => createFeed.mutate(newFeed)}>Click me to create new feed!</button> */}
 				<div className="max-w-2xl mx-8 flex flex-col items-start justify-center gap-4">
@@ -60,7 +64,7 @@ const Home: NextPage = () => {
 				</div>
 			</div>
 			<button onClick={handleSubmit}>Submit</button>
-		</Layout>
+		</div>
 	)
 }
 
