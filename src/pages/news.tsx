@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { api } from "~/utils/api";
 import Layout from "~/components/Layout";
 import ArticleLink from '~/components/ArticleLink';
+import Label from '~/components/Label';
 
 
 export type LabelType = "SAME_EVENT" | "SAME_STORY" | "SAME_TOPIC" | "DIFFERENT";
@@ -33,41 +34,32 @@ const Home: NextPage = () => {
 	return (
 		<Layout>
 			<button onClick={() => toggleLabelling(!labellingEnabled)}>toggle labelling {!labellingEnabled ? "on" : "off"}</button>
-			<div className="container mx-auto px-32">
-				{labellingEnabled && <div className="flex gap-4">
-					<div onClick={() => setCurrentLabel("SAME_EVENT")} className={classNames("hover:bg-green-200 p-[2px]", {
-						"hover:cursor-pointer": labellingEnabled,
-						"bg-green-300": currentLabel === "SAME_EVENT",
-					})}>SAME_EVENT</div>
-					<div onClick={() => setCurrentLabel("SAME_STORY")} className={classNames("hover:bg-blue-200 p-[2px]", {
-						"hover:cursor-pointer": labellingEnabled,
-						"bg-blue-300": currentLabel === "SAME_STORY",
-					})}>SAME_STORY</div>
-					<div onClick={() => setCurrentLabel("SAME_TOPIC")} className={classNames("hover:bg-purple-200 p-[2px]", {
-						"hover:cursor-pointer": labellingEnabled,
-						"bg-purple-300": currentLabel === "SAME_TOPIC",
-					})}>SAME_TOPIC</div>
-					<div onClick={() => setCurrentLabel("DIFFERENT")} className={classNames(" hover:bg-red-200 p-[2px]", {
-						"hover:cursor-pointer": labellingEnabled,
-						"bg-red-300": currentLabel === "DIFFERENT",
-					})}>DIFFERENT</div>
-					<button onClick={handleSubmit}>Submit</button>
-				</div>}
+			<div className="flex flex-col items-center justify-start">
 				{/* <button onClick={() => createFeed.mutate(newFeed)}>Click me to create new feed!</button> */}
-				<div className="flex flex-col items-start justify-center gap-4">
-					{latestArticles.data ? latestArticles.data.map((article) => (
-						<ArticleLink
-							key={article.id}
-							labellingEnabled={labellingEnabled}
-							isSelected={labellingEnabled && labelledArticles.includes(article.id)}
-							labellingCategory={currentLabel}
-							onClick={() => toggleArticleToLabelled(article.id)}
-							article={article}>
-							{article.title}
-						</ArticleLink>
-					)) : <div>Loading...</div>}
+				<div className="max-w-2xl mx-8 flex flex-col items-start justify-center gap-4">
+					{labellingEnabled &&
+						<div className="w-full flex gap-4 mb-9">
+							<Label boundLabel='SAME_EVENT' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
+							<Label boundLabel='SAME_STORY' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
+							<Label boundLabel='SAME_TOPIC' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
+							<Label boundLabel='DIFFERENT' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
+						</div>}
+					<div className="flex flex-col gap-4">
+						{latestArticles.data ? latestArticles.data.map((article) => (
+							<ArticleLink
+								key={article.id}
+								labellingEnabled={labellingEnabled}
+								isSelected={labellingEnabled && labelledArticles.includes(article.id)}
+								labellingCategory={currentLabel}
+								onClick={() => toggleArticleToLabelled(article.id)}
+								article={article}>
+								{article.title}
+							</ArticleLink>
+						)) : <div>Loading...</div>}
+					</div>
 				</div>
 			</div>
+			<button onClick={handleSubmit}>Submit</button>
 		</Layout>
 	)
 }
