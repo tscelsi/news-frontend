@@ -24,6 +24,7 @@ export const articleRouter = createTRPCRouter({
           published: true,
           outlet: true,
           author: true,
+          body: true,
         }
       });
     }),

@@ -2,7 +2,6 @@ import React from 'react'
 import { type NextPage } from 'next'
 import classNames from 'classnames';
 import { api } from "~/utils/api";
-import Layout from "~/components/Layout";
 import ArticleLink from '~/components/ArticleLink';
 import Label from '~/components/Label';
 import Navbar from '~/components/Navbar';
@@ -56,9 +55,7 @@ const Home: NextPage = () => {
 								isSelected={labellingEnabled && labelledArticles.includes(article.id)}
 								labellingCategory={currentLabel}
 								onClick={() => toggleArticleToLabelled(article.id)}
-								article={article}>
-								{article.title}
-							</ArticleLink>
+								article={article} />
 						)) : <div>Loading...</div>}
 					</div>
 				</div>

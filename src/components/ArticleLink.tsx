@@ -10,13 +10,16 @@ type Props = {
   isSelected?: boolean
   labellingEnabled?: boolean
   labellingCategory?: LabelType
-} & React.PropsWithChildren
+}
 
-const ArticleLink = ({ children, article, isSelected, labellingCategory, labellingEnabled, ...rest }: Props) => {
+const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled, ...rest }: Props) => {
+  const [expanded, setExpanded] = React.useState(false);
+
   return (
-    <div {...rest} className={classNames("font-satoshi bg-white w-full flex gap-4 border-4 items-center rounded-xl border-black px-4 py-2 shadow-none transition-shadow", {
+    <div {...rest} className={classNames("font-satoshi w-full flex gap-4 border-4 items-center rounded-xl border-black px-4 py-2 shadow-none transition-shadow", {
       // non-labelling styles
       "hover:shadow-blak": !labellingEnabled,
+      "bg-white": !labellingEnabled,
       // labelling styles
       "hover:shadow-green": labellingEnabled && labellingCategory === "SAME_EVENT",
       "border-green-500": labellingEnabled && labellingCategory === "SAME_EVENT",
@@ -37,7 +40,12 @@ const ArticleLink = ({ children, article, isSelected, labellingCategory, labelli
           {article.outlet}
         </p>
         <div className="text-lg font-bold grow">
-          {children}
+          {article.title}
+        </div>
+        <div className={classNames("mt-2 mb-4", {
+          "hidden": !expanded || labellingEnabled,
+        })}>
+          {article.body.substring(0, 150)}...
         </div>
         <div className="flex gap-4 text-sm">
           {article.author.length !== 0 && <p>{article.author.join(" & ")}</p>}
@@ -45,7 +53,7 @@ const ArticleLink = ({ children, article, isSelected, labellingCategory, labelli
         </div>
       </div>
       {!labellingEnabled && <div className="flex grow self-start justify-end">
-        <HiChevronDown className="hover:cursor-pointer" size={24}/>
+        <HiChevronDown onClick={() => setExpanded(!expanded)} className="hover:cursor-pointer" size={24} />
       </div>}
     </div>
   )
