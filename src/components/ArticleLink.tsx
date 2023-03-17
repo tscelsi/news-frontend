@@ -2,7 +2,7 @@ import React from 'react'
 import classNames from 'classnames';
 import type { ArticleLatest } from "~/server/api/routers/article";
 import type { LabelType } from '~/pages/news';
-import { HiChevronDown } from "react-icons/hi";
+import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 
 type Props = {
   article: ArticleLatest
@@ -21,6 +21,7 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
       "hover:shadow-blak": !labellingEnabled,
       "bg-white": !labellingEnabled,
       // labelling styles
+      "hover:cursor-pointer": labellingEnabled,
       "hover:shadow-green": labellingEnabled && labellingCategory === "SAME_EVENT",
       "border-green-500": labellingEnabled && labellingCategory === "SAME_EVENT",
       "hover:shadow-blue": labellingEnabled && labellingCategory === "SAME_STORY",
@@ -53,7 +54,8 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
         </div>
       </div>
       {!labellingEnabled && <div className="flex grow self-start justify-end">
-        <HiChevronDown onClick={() => setExpanded(!expanded)} className="hover:cursor-pointer" size={24} />
+        {!expanded ? <HiChevronDown onClick={() => setExpanded(true)} className="hover:cursor-pointer" size={24} /> :
+          <HiChevronUp onClick={() => setExpanded(false)} className="hover:cursor-pointer" size={24} />}
       </div>}
     </div>
   )
