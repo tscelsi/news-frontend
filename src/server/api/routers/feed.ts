@@ -18,6 +18,24 @@ export const feedRouter = createTRPCRouter({
         },
       });
     }),
+  get: publicProcedure
+  .input(z.object({
+    id: z.string(),
+  }))
+  .query(async ({ ctx, input }) => {
+    return ctx.prisma.feed.findUnique({
+      where: {
+        id: input.id,
+      },
+      include: {
+        outlets: {
+          include: {
+            outlet: true,
+          },
+        }
+      },
+    });
+  }),
   delete: publicProcedure
     .input(z.object({
       id: z.string(),

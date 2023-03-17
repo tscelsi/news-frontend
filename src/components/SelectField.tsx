@@ -1,10 +1,15 @@
 import React from 'react'
-import Select, { type OptionProps } from 'react-select'
+import Select from 'react-select'
 import classNames from 'classnames'
+
+type Option = {
+  label: string
+  value: string
+}
 
 type Props = {
   label?: string
-  options: OptionProps[]
+  options?: Option[]
 }
 
 const SelectField = ({ options, label }: Props) => {
@@ -14,7 +19,7 @@ const SelectField = ({ options, label }: Props) => {
       <Select
         unstyled
         placeholder="Select an option"
-        options={options}
+        options={options ?? []}
         // override option display style
         styles={{
           option: () => ({
