@@ -39,8 +39,6 @@ const Feed: NextPage = () => {
       "bg-white": labellingEnabled,
     })}>
       <Navbar
-        toggleLabelling={toggleLabelling}
-        labellingEnabled={labellingEnabled}
         buttonLeftOnClick={() => router.push('/_feed/manage')}
         buttonLeftText='manage my feed'
         buttonRightOnClick={() => toggleLabelling(!labellingEnabled)}
