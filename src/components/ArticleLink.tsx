@@ -19,7 +19,7 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
     <div {...rest} className={classNames("font-satoshi w-full flex gap-4 border-4 items-center rounded-xl border-black px-4 py-2 shadow-none transition-shadow", {
       // non-labelling styles
       "hover:shadow-blak": !labellingEnabled,
-      "bg-white": !labellingEnabled,
+      "bg-white": !labellingEnabled || labellingEnabled && !isSelected,
       // labelling styles
       "hover:cursor-pointer": labellingEnabled,
       "hover:shadow-green": labellingEnabled && labellingCategory === "SAME_EVENT",

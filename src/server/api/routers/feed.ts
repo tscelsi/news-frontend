@@ -19,23 +19,23 @@ export const feedRouter = createTRPCRouter({
       });
     }),
   get: publicProcedure
-  .input(z.object({
-    id: z.string(),
-  }))
-  .query(async ({ ctx, input }) => {
-    return ctx.prisma.feed.findUnique({
-      where: {
-        id: input.id,
-      },
-      include: {
-        outlets: {
-          include: {
-            outlet: true,
-          },
-        }
-      },
-    });
-  }),
+    .input(z.object({
+      id: z.string(),
+    }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.feed.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          outlets: {
+            include: {
+              outlet: true,
+            },
+          }
+        },
+      });
+    }),
   delete: publicProcedure
     .input(z.object({
       id: z.string(),
@@ -49,13 +49,61 @@ export const feedRouter = createTRPCRouter({
       })
       return Feed
     }),
+  update: publicProcedure
+    .input(z.object({
+      id: z.string(),
+      name: z.string(),
+      outlets: z.array(z.object({
+        prefix: z.string(),
+        outlet: z.object({
+          id: z.string(),
+          name: z.string(),
+          base_url: z.string(),
+          ref: z.string(),
+        }),
+      }))
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const results = await ctx.prisma.$transaction([
+        // removes all existing feed outlets.
+        ctx.prisma.feedOutlet.deleteMany({
+          where: {
+            feedId: input.id
+          }
+        }),
+        // updates a feed with n outlets.
+        ctx.prisma.feed.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            name: input.name,
+            outlets: {
+              create: input.outlets.map((outlet) => ({
+                prefix: outlet.prefix,
+                outletRef: outlet.outlet.ref,
+                outlet: {
+                  connect: {
+                    id: outlet.outlet.id,
+                  },
+                },
+              })),
+            },
+          },
+        })])
+      return results[1]
+    }),
   create: publicProcedure
     .input(z.object({
       name: z.string(),
       outlets: z.array(z.object({
         prefix: z.string(),
-        outletId: z.string(),
-        outletRef: z.string()
+        outlet: z.object({
+          id: z.string(),
+          name: z.string(),
+          base_url: z.string(),
+          ref: z.string(),
+        }),
       }))
     }))
     .mutation(async ({ ctx, input }) => {
@@ -66,10 +114,10 @@ export const feedRouter = createTRPCRouter({
           outlets: {
             create: input.outlets.map((outlet) => ({
               prefix: outlet.prefix,
-              outletRef: outlet.outletRef,
+              outletRef: outlet.outlet.ref,
               outlet: {
                 connect: {
-                  id: outlet.outletId,
+                  id: outlet.outlet.id,
                 },
               },
             })),

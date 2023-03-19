@@ -111,6 +111,7 @@ model Outlet {
     id            String    @id @default(auto()) @map("_id") @db.ObjectId
     ref           String
     name          String
+    base_url      String
     outlets       FeedOutlet[]
     created_at    DateTime  @default(now())
     modified_at   DateTime  @default(now())

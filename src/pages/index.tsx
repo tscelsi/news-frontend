@@ -8,7 +8,7 @@ import { api } from "~/utils/api";
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
   const hello2 = api.article.latest.useQuery();
-  console.log(hello2)
+
   return (
     <>
       <Head>

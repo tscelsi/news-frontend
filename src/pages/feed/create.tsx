@@ -22,7 +22,6 @@ const Create = () => {
     }
   });
 
-  console.log(watch("outlets"))
   const createFeed = api.feed.create.useMutation()
   const onSubmit: SubmitHandler<Inputs> = data => {
     // add outletRef to data
