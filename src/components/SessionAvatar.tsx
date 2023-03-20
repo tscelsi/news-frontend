@@ -12,7 +12,7 @@ const SessionAvatar = () => {
         <DropdownMenu.Trigger className="flex items-center justify-center hover:cursor-pointer">
           {session.data?.user?.email && (
             <div
-              className="h-12 w-12 text-xl flex items-center justify-center rounded-full blur:outline-none hover:shadow-blak transition-all font-black border-4 border-black"
+              className="bg-white h-12 w-12 text-xl flex items-center justify-center rounded-full blur:outline-none hover:shadow-blak transition-all font-black border-4 border-black"
             >{session.data?.user?.email.slice(0, 1).toLocaleUpperCase()}</div>)}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>

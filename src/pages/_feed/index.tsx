@@ -49,7 +49,7 @@ const Feed: NextPage = () => {
       >Global Climate</Navbar>
       <div className="flex flex-col items-center justify-start">
         {/* <button onClick={() => createFeed.mutate(newFeed)}>Click me to create new feed!</button> */}
-        <div className="lg:max-w-4xl mx-8 flex flex-col items-start justify-center gap-4">
+        <div className="lg:w-1/2 mx-8 flex flex-col items-start justify-center gap-4">
           {labellingEnabled &&
             <div className="w-full flex gap-4 mb-9">
               <Label boundLabel='SAME_EVENT' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />

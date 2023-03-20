@@ -15,6 +15,13 @@ type Props = {
 const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled, ...rest }: Props) => {
   const [expanded, setExpanded] = React.useState(false);
 
+  const onLinkClick = (article: ArticleLatest) => {
+    // TODO: fingerprint
+    if (window) {
+      window.open(article.url, '_blank')
+    }
+  }
+
   return (
     <div {...rest} className={classNames("font-satoshi w-full flex gap-4 border-4 items-center rounded-xl border-black px-4 py-2 shadow-none transition-shadow", {
       // non-labelling styles
@@ -40,7 +47,7 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
         <p className="text-sm font-medium">
           {article.outlet}
         </p>
-        <div className="text-lg font-bold grow">
+        <div onClick={() => onLinkClick(article)} className="flex gap-1 items-center text-lg font-bold grow hover:underline hover:cursor-pointer">
           {article.title}
         </div>
         <div className={classNames("mt-2 mb-4", {
