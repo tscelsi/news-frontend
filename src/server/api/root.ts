@@ -4,6 +4,7 @@ import { articleRouter } from "~/server/api/routers/article";
 import { feedRouter } from "./routers/feed";
 import { outletRouter } from "./routers/outlet";
 import { labelRouter } from "./routers/label";
+import { userRouter } from "./routers/user";
 /**
  * This is the primary router for your server.
  *
@@ -15,6 +16,7 @@ export const appRouter = createTRPCRouter({
   feed: feedRouter,
   outlet: outletRouter,
   label: labelRouter,
+  user: userRouter,
 });
 
 // export type definition of API

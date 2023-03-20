@@ -23,7 +23,7 @@ model Example {
 // Necessary for Next auth
 model Account {
     id                String  @id @default(auto()) @map("_id") @db.ObjectId
-    userId            String
+    userId            String  @db.ObjectId
     type              String
     provider          String
     providerAccountId String
@@ -42,7 +42,7 @@ model Account {
 model Session {
     id           String   @id @default(auto()) @map("_id") @db.ObjectId
     sessionToken String   @unique
-    userId       String
+    userId       String   @db.ObjectId
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -55,6 +55,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    feed          Feed?
 }
 
 model VerificationToken {
@@ -88,10 +89,12 @@ model Article {
 
 
 model Feed {
-    id           String    @id @default(auto()) @map("_id") @db.ObjectId
-    name         String
-    outlets      FeedOutlet[]
-    created_at   DateTime  @default(now())
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    name          String
+    user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId        String    @unique @db.ObjectId
+    outlets       FeedOutlet[]
+    created_at    DateTime  @default(now())
     modified_at   DateTime  @default(now())
 }
 

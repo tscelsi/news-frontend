@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames';
 import type { ArticleLatest } from "~/server/api/routers/article";
-import type { LabelType } from '~/pages/news';
+import type { LabelType } from '~/pages/feed';
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
 
 type Props = {
@@ -47,17 +47,17 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
         <p className="text-sm font-medium">
           {article.outlet}
         </p>
-        <div onClick={() => onLinkClick(article)} className="flex gap-1 items-center text-lg font-bold grow hover:underline hover:cursor-pointer">
-          {article.title}
+        <div className="flex gap-1 items-center text-lg font-bold grow">
+          <span onClick={() => onLinkClick(article)} className="hover:underline hover:cursor-pointer">{article.title}</span>
         </div>
         <div className={classNames("mt-2 mb-4", {
           "hidden": !expanded || labellingEnabled,
         })}>
           {article.body.substring(0, 150)}...
         </div>
-        <div className="flex gap-4 text-sm">
+        <div className="flex gap-4 text-sm text-gray-700">
+          <p>{article.modified.toLocaleDateString()} {article.modified.toLocaleTimeString()}</p>
           {article.author.length !== 0 && <p>{article.author.join(" & ")}</p>}
-          <p>{article.published.toDateString()}</p>
         </div>
       </div>
       {!labellingEnabled && <div className="flex grow self-start justify-end">

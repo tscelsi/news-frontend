@@ -1,7 +1,6 @@
 import React from 'react'
 import { type NextPage } from 'next'
 import { useForm, type SubmitHandler, Controller, useFieldArray } from "react-hook-form";
-import { z } from 'zod'
 import classNames from 'classnames';
 import { api } from '~/utils/api';
 import type { Outlet } from '@prisma/client';
@@ -36,7 +35,7 @@ const Manage: NextPage = () => {
 	const feeds = api.feed.list.useQuery(undefined, { refetchOnWindowFocus: false, refetchInterval: false });
 	const updateFeed = api.feed.update.useMutation();
 	const createFeed = api.feed.create.useMutation();
-	const outlets = api.outlet.getAll.useQuery(undefined, { refetchInterval: false });
+	const outlets = api.outlet.getAll.useQuery(undefined);
 	const feed = feeds.data ? feeds.data[0] : undefined;
 	const { register, reset, control, handleSubmit, watch, formState: { errors }, setError } = useForm<Inputs>({
 		defaultValues: {

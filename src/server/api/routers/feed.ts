@@ -2,30 +2,15 @@ import { z } from "zod";
 
 import {
   createTRPCRouter,
-  publicProcedure,
+  protectedProcedure,
 } from "~/server/api/trpc";
 
 export const feedRouter = createTRPCRouter({
-  list: publicProcedure
+  list: protectedProcedure
     .query(({ ctx }) => {
       return ctx.prisma.feed.findMany({
-        include: {
-          outlets: {
-            include: {
-              outlet: true,
-            },
-          }
-        },
-      });
-    }),
-  get: publicProcedure
-    .input(z.object({
-      id: z.string(),
-    }))
-    .query(async ({ ctx, input }) => {
-      return ctx.prisma.feed.findUnique({
         where: {
-          id: input.id,
+          userId: ctx.session.user.id,
         },
         include: {
           outlets: {
@@ -36,7 +21,7 @@ export const feedRouter = createTRPCRouter({
         },
       });
     }),
-  delete: publicProcedure
+  delete: protectedProcedure
     .input(z.object({
       id: z.string(),
     }))
@@ -49,7 +34,7 @@ export const feedRouter = createTRPCRouter({
       })
       return Feed
     }),
-  update: publicProcedure
+  update: protectedProcedure
     .input(z.object({
       id: z.string(),
       name: z.string(),
@@ -68,7 +53,7 @@ export const feedRouter = createTRPCRouter({
         // removes all existing feed outlets.
         ctx.prisma.feedOutlet.deleteMany({
           where: {
-            feedId: input.id
+            feedId: input.id,
           }
         }),
         // updates a feed with n outlets.
@@ -93,7 +78,7 @@ export const feedRouter = createTRPCRouter({
         })])
       return results[1]
     }),
-  create: publicProcedure
+  create: protectedProcedure
     .input(z.object({
       name: z.string(),
       outlets: z.array(z.object({
@@ -111,6 +96,7 @@ export const feedRouter = createTRPCRouter({
       const Feed = await ctx.prisma.feed.create({
         data: {
           name: input.name,
+          userId: ctx.session.user.id,
           outlets: {
             create: input.outlets.map((outlet) => ({
               prefix: outlet.prefix,

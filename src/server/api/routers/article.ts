@@ -15,13 +15,14 @@ export const articleRouter = createTRPCRouter({
     .query(({ ctx }) => {
       return ctx.prisma.article.findMany({
         orderBy: {
-          published: "desc",
+          modified: "desc",
         },
         take: 20,
         select: {
           id: true,
           title: true,
           published: true,
+          modified: true,
           outlet: true,
           author: true,
           body: true,

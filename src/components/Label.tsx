@@ -1,5 +1,5 @@
 import React from 'react'
-import type { LabelType } from '~/pages/news';
+import type { LabelType } from '~/pages/feed';
 import classNames from 'classnames';
 
 type Props = {
