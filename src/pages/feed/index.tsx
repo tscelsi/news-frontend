@@ -65,7 +65,9 @@ const Feed: NextPage = () => {
                 isSelected={labellingEnabled && labelledArticles.includes(article.id)}
                 labellingCategory={currentLabel}
                 onClick={() => toggleArticleToLabelled(article.id)}
-                article={article} />
+                article={article}
+                linkActive
+              />
             )) : <div>Loading...</div>}
           </div>
         </div>

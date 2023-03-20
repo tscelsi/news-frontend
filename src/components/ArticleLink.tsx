@@ -10,9 +10,10 @@ type Props = {
   isSelected?: boolean
   labellingEnabled?: boolean
   labellingCategory?: LabelType
+  linkActive?: boolean
 }
 
-const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled, ...rest }: Props) => {
+const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled, linkActive, ...rest }: Props) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const onLinkClick = (article: ArticleLatest) => {
@@ -48,7 +49,10 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
           {article.outlet}
         </p>
         <div className="flex gap-1 items-center text-lg font-bold grow">
-          <span onClick={() => onLinkClick(article)} className="hover:underline hover:cursor-pointer">{article.title}</span>
+          <span onClick={linkActive ? () => onLinkClick(article) : undefined} className={classNames({
+            "hover:cursor-pointer": linkActive,
+            "hover:underline": linkActive,
+          })}>{article.title}</span>
         </div>
         <div className={classNames("mt-2 mb-4", {
           "hidden": !expanded || labellingEnabled,
