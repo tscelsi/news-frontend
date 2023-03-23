@@ -10,7 +10,7 @@ type Props = {
 
 const Navbar = ({ children, buttonLeftRoute, buttonRightRoute, buttonLeftText, buttonRightText }: Props) => {
   return (
-    <div className="font-satoshi flex justify-center pt-16 pb-16 font-black">
+    <div className="relative font-satoshi flex justify-center pt-16 pb-16 font-black z-50">
       <div className="flex justify-between items-end w-4/5">
         <div className="flex-1 mr-auto">
           {buttonLeftRoute ? typeof buttonLeftRoute === 'function' ? <a onClick={buttonLeftRoute} className="hover:cursor-pointer">{buttonLeftText}</a> :

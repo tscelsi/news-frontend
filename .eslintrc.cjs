@@ -15,6 +15,7 @@ const config = {
   parserOptions: {
     project: "./tsconfig.json",
   },
+  ignorePatterns: ["triggers/*"],
   plugins: ["@typescript-eslint"],
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   rules: {

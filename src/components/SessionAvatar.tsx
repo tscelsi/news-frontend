@@ -15,7 +15,7 @@ const SessionAvatar = () => {
             >{session.data?.user?.email.slice(0, 1).toLocaleUpperCase()}</div>)}
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
-          <DropdownMenu.Content className="flex flex-col w-[128px] mb-1">
+          <DropdownMenu.Content className="flex flex-col w-[128px] mb-1 font-semibold">
             <DropdownMenu.Item className="bg-white pl-3 flex justify-start items-center h-12 border-t-4 border-b-2 border-black border-x-4 first:rounded-t-lg hover:bg-gray-100 hover:cursor-pointer focus:outline-none">
               <Link href="/account">Account</Link>
             </DropdownMenu.Item>

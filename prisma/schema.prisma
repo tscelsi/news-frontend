@@ -48,14 +48,16 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(auto()) @map("_id") @db.ObjectId
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    feed          Feed?
+    id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+    name               String?
+    email              String?       @unique
+    emailVerified      DateTime?
+    image              String?
+    daily_scrape_count Int?          @default(0)
+    accounts           Account[]
+    sessions           Session[]
+    feed               Feed?
+    scrapingJobs       ScrapingJob[]
 }
 
 model VerificationToken {
@@ -68,66 +70,82 @@ model VerificationToken {
 
 // CUSTOM SCHEMAS
 
-model Article {
-    id            String    @id @map("_id") @db.ObjectId
-    outlet        String
-    url           String    @unique
-    title         String
-    body          String
-    created       DateTime
-    modified      DateTime
-    published     DateTime
-    scrape_time   DateTime
-    extra         String?
-    prefix        String
-    tags          String[]
-    author        String[]
-    wordCount     Int?
-    queryLabels        Label[] @relation(name: "queryLabels")
-    answerLabels        Label[] @relation(name: "answerLabels")
+model ScrapingJob {
+    id           String    @id @default(auto()) @map("_id") @db.ObjectId
+    // a user can only have a single scraping job document. A scraping job gets updated with articles
+    // from the latest scrape and overrides existing articles.
+    user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId       String    @db.ObjectId
+    created_at   DateTime  @default(now())
+    modified_at  DateTime  @default(now())
+    completed_at DateTime?
+    status       String
+    articleIds   String[]  @db.ObjectId
+    articles     Article[] @relation(fields: [articleIds], references: [id])
 }
 
+model Article {
+    id             String        @id @map("_id") @db.ObjectId
+    outlet         String
+    url            String        @unique
+    title          String
+    body           String
+    created        DateTime
+    modified       DateTime
+    published      DateTime
+    scrape_time    DateTime
+    extra          String?
+    prefix         String
+    tags           String[]
+    author         String[]
+    wordCount      Int?
+    // an Article can belong to many scraping jobs
+    scrapingJobIds String[]      @db.ObjectId
+    scrapingJobs   ScrapingJob[] @relation(fields: [scrapingJobIds], references: [id])
+    queryLabels    Label[]       @relation(name: "queryLabels")
+    answerLabels   Label[]       @relation(name: "answerLabels")
+}
 
 model Feed {
-    id            String    @id @default(auto()) @map("_id") @db.ObjectId
-    name          String
-    user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId        String    @unique @db.ObjectId
-    outlets       FeedOutlet[]
-    created_at    DateTime  @default(now())
-    modified_at   DateTime  @default(now())
+    id          String       @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String       @unique @db.ObjectId
+    outlets     FeedOutlet[]
+    created_at  DateTime     @default(now())
+    modified_at DateTime     @default(now())
 }
 
 model FeedOutlet {
-    id           String    @id @default(auto()) @map("_id") @db.ObjectId
-    feed         Feed      @relation(fields: [feedId], references: [id], onDelete: Cascade)
-    feedId       String    @db.ObjectId
-    outlet       Outlet    @relation(fields: [outletId], references: [id])
-    outletId     String    @db.ObjectId
-    prefix       String
-    outletRef    String
-    created_at   DateTime  @default(now())
-    modified_at  DateTime  @default(now())
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    feed        Feed     @relation(fields: [feedId], references: [id], onDelete: Cascade)
+    feedId      String   @db.ObjectId
+    outlet      Outlet   @relation(fields: [outletId], references: [id])
+    outletId    String   @db.ObjectId
+    prefix      String
+    outletRef   String
+    created_at  DateTime @default(now())
+    modified_at DateTime @default(now())
 }
 
 model Outlet {
-    id            String    @id @default(auto()) @map("_id") @db.ObjectId
-    ref           String
-    name          String
-    base_url      String
-    outlets       FeedOutlet[]
-    created_at    DateTime  @default(now())
-    modified_at   DateTime  @default(now())
+    id          String       @id @default(auto()) @map("_id") @db.ObjectId
+    ref         String
+    name        String
+    base_url    String
+    outlets     FeedOutlet[]
+    created_at  DateTime     @default(now())
+    modified_at DateTime     @default(now())
 }
 
 model Label {
-    id          String    @id @default(auto()) @map("_id") @db.ObjectId
-    label       String
-    count       Int
-    articleQId  String    @db.ObjectId
-    articleAId  String    @db.ObjectId
-    articleQ    Article   @relation(fields: [articleQId], references: [id], name: "queryLabels")
-    articleA    Article   @relation(fields: [articleAId], references: [id], name: "answerLabels")
+    id         String  @id @default(auto()) @map("_id") @db.ObjectId
+    label      String
+    count      Int
+    articleQId String  @db.ObjectId
+    articleAId String  @db.ObjectId
+    articleQ   Article @relation(fields: [articleQId], references: [id], name: "queryLabels")
+    articleA   Article @relation(fields: [articleAId], references: [id], name: "answerLabels")
 
     @@unique([articleQId, articleAId, label])
 }

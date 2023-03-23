@@ -45,6 +45,16 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  events: {
+    async createUser({ user }) {
+      // when a user is created, we create their profile attributes here.
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { daily_scrape_count: 0 },
+      })
+      return;
+    }
+  },
   adapter: PrismaAdapter(prisma),
   providers: [
     // DiscordProvider({
