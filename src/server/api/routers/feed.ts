@@ -4,6 +4,7 @@ import {
   createTRPCRouter,
   protectedProcedure,
 } from "~/server/api/trpc";
+import { TRPCError } from "@trpc/server";
 
 export const feedRouter = createTRPCRouter({
   list: protectedProcedure
@@ -20,6 +21,28 @@ export const feedRouter = createTRPCRouter({
           }
         },
       });
+    }),
+  get: protectedProcedure
+    .query(async ({ ctx }) => {
+      const feed = await ctx.prisma.feed.findUnique({
+        where: {
+          userId: ctx.session.user.id,
+        },
+        include: {
+          outlets: {
+            include: {
+              outlet: true,
+            },
+          }
+        },
+      });
+      if (!feed) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: "A feed for your account was not found"
+        });
+      }
+      return feed;
     }),
   delete: protectedProcedure
     .input(z.object({

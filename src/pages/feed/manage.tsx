@@ -96,7 +96,7 @@ const Manage: NextPage = () => {
 
 	return (
 		<div className={classNames("font-satoshi min-h-screen bg-[#F43F5E]")}>
-			<Navbar buttonLeftText="back to feed" buttonLeftRoute='/_feed'>Manage my feed</Navbar>
+			<Navbar buttonLeftText="back to feed" buttonLeftRoute='/feed'>Manage my feed</Navbar>
 			<div className="flex justify-center items-center">
 				<div className=" bg-white border-4 border-black rounded-xl min-w-[66%] min-h-[450px]">
 					<div className="m-16">

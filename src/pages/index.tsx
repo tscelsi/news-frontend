@@ -15,7 +15,7 @@ const categories: LabelType[] = [
 const random = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 const Home = () => {
-  const latestArticles = api.article.latest.useQuery(undefined, { refetchOnWindowFocus: false, refetchInterval: false });
+  const { data: latestArticles } = api.article.latest20.useQuery(undefined, { refetchOnWindowFocus: false, refetchInterval: false });
   return (
     <div className="font-satoshi min-h-screen bg-[#F43F5E]">
       <div className="max-w-md flex flex-col gap-12 h-screen justify-center pb-16 lg:ml-16 bg-transparent">
@@ -24,7 +24,7 @@ const Home = () => {
       </div>
       <div className="absolute top-0 right-0 w-screen h-screen overflow-hidden">
         <div className="lg:w-1/2 absolute top-[-15rem] lg:left-[60%] rotate-[-20deg] flex flex-col gap-4">
-          {latestArticles.data ? latestArticles.data.map((article) => (
+          {latestArticles ? latestArticles.map((article) => (
             <ArticleLink
               key={article.id}
               labellingEnabled={Math.random() < 0.5}

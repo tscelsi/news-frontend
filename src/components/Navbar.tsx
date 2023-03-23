@@ -17,7 +17,7 @@ const Navbar = ({ children, buttonLeftRoute, buttonRightRoute, buttonLeftText, b
             <Link href={buttonLeftRoute} className="hover:cursor-pointer">{buttonLeftText}</Link> : null}
         </div>
         <div className="flex-1">
-          <h1 className="text-3xl text-center">{children}</h1>
+          <h1 className="text-4xl text-center">{children}</h1>
         </div>
         <div className="flex-1 text-end">{buttonRightRoute ? typeof buttonRightRoute === 'function' ? <a onClick={buttonRightRoute} className="hover:cursor-pointer">{buttonRightText}</a> :
           <Link href={buttonRightRoute} className="hover:cursor-pointer">{buttonRightText}</Link> : null}
