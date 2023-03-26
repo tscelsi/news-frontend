@@ -6,39 +6,33 @@ import {
 } from "~/server/api/trpc";
 import type { ArrayElement } from "~/utils/types";
 
-import  { type inferRouterOutputs, TRPCError } from "@trpc/server";
+import { type inferRouterOutputs, TRPCError } from "@trpc/server";
 
 export const articleRouter = createTRPCRouter({
   /**
    * Retrieves the 20 latest articles from your private feed.
    */
   listPrivate: protectedProcedure
-    .query(async ({ ctx }) => {
-      const feed = await ctx.prisma.feed.findUnique({
-        where: {
-          userId: ctx.session.user.id,
-        },
-        include: {
-          outlets: {
-            include: {
-              outlet: {
-                select: {
-                  ref: true,
-                },
-              },
-            },
-          }
-        },
-      })
-      if (!feed) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: "A feed for your account was not found"
-        });
+    .input(z.object({
+      feed: z.object({
+        outlets: z.array(z.object({
+          prefix: z.string(),
+          outlet: z.object({
+            ref: z.string(),
+          }),
+        }))
+      }).optional(),
+      limit: z.number().optional(),
+      cursor: z.string().optional(),
+    }))
+    .query(async ({ ctx, input }) => {
+      const DEFAULT_LIMIT = 20;
+      if (!input.feed) {
+        return [];
       }
       return ctx.prisma.article.findMany({
         where: {
-          OR: feed.outlets.map((feedOutlet) => ({
+          OR: input.feed.outlets.map((feedOutlet) => ({
             AND: [{
               outlet: {
                 equals: feedOutlet.outlet.ref,
@@ -49,7 +43,17 @@ export const articleRouter = createTRPCRouter({
               }
             }]
           }))
-        }
+        },
+        take: input.limit || DEFAULT_LIMIT,
+        ...(input.cursor ? {
+          skip: 1,
+          cursor: {
+            id: input?.cursor,
+          },
+        } : {}),
+        orderBy: {
+          modified: "desc",
+        },
       })
     }),
   /** Retrieve the 20 latest articles, regardless of your private feed

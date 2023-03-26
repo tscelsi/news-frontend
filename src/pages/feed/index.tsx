@@ -9,7 +9,7 @@ import Label from '~/components/Label';
 import Navbar from '~/components/Navbar';
 import Button from '~/components/Button';
 import ScrapingJobStatus from '~/components/ScrapingJobStatus';
-
+import { type Article } from '@prisma/client';
 export type LabelType = "SAME_EVENT" | "SAME_STORY" | "SAME_TOPIC" | "DIFFERENT";
 
 
@@ -29,12 +29,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 const Feed: NextPage = () => {
-  const { data: feed } = api.feed.get.useQuery(undefined, { refetchInterval: false, refetchOnWindowFocus: false });
-  const { data: articles, error } = api.article.listPrivate.useQuery(undefined, { refetchInterval: false, refetchOnWindowFocus: false });
-  const { data: scrapingJob } = api.scrapingJob.get.useQuery(undefined, { refetchInterval: false, refetchOnWindowFocus: false });
-  console.log(error?.data)
-  console.log(scrapingJob)
-  // const submitLabels = api.label.create.useMutation();
+  const [cursor, setCursor] = React.useState<string>();
+  const { data: feed, isLoading } = api.feed.get.useQuery(undefined, { refetchInterval: false, refetchOnWindowFocus: false });
+  const { data: articles } = api.article.listPrivate.useQuery(!feed || !feed.outlets.length ? { cursor } : { feed, cursor }, { enabled: !!feed, keepPreviousData: true, refetchInterval: false, refetchOnWindowFocus: false });
+  const [allArticles, setAllArticles] = React.useState<Article[]>([]);
+  const { data: scrapingJob } = api.scrapingJob.get.useQuery();
   const [labellingEnabled, toggleLabelling] = React.useState(false);
   const [currentLabel, setCurrentLabel] = React.useState<LabelType>("SAME_EVENT");
   const [labelledArticles, setLabelledArticles] = React.useState<string[]>([]);
@@ -46,6 +45,13 @@ const Feed: NextPage = () => {
       setLabelledArticles(labelledArticles.filter((id) => id !== articleId));
     }
   }
+
+  React.useEffect(() => {
+    if (articles && articles.length) {
+      if (allArticles && allArticles.length === 0) setAllArticles([...allArticles, ...articles]);
+      else if (allArticles[allArticles.length - 1]?.id !== articles[articles.length - 1]?.id) setAllArticles([...allArticles, ...articles])
+    }
+  }, [allArticles, articles])
 
   // const handleSubmit = () => {
   //   if (labelledArticles.length === 0) return;
@@ -65,7 +71,7 @@ const Feed: NextPage = () => {
         buttonRightText={labellingEnabled && feed ? 'stop labelling' : feed ? 'start labelling' : undefined}
         subHeader={scrapingJob ? <ScrapingJobStatus scrapingJob={scrapingJob} /> : undefined}
       >{feed?.name}</Navbar>
-      {error && error.data?.code === "BAD_REQUEST" && <div className="lg:w-1/2 ml-32 absolute top-0 h-screen flex flex-col gap-8 justify-center">
+      {!isLoading && (!feed || !feed.outlets.length) && <div className="lg:w-1/2 ml-32 absolute top-0 h-screen flex flex-col gap-8 justify-center">
         <h3 className="font-bold text-5xl">Looks like you don&apos;t have a feed yet.</h3>
         <Link className="max-w-sm" href='/feed/manage'>
           <Button>Create my feed</Button>
@@ -80,9 +86,8 @@ const Feed: NextPage = () => {
               <Label boundLabel='SAME_TOPIC' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
               <Label boundLabel='DIFFERENT' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
             </div>}
-          <div className="flex flex-col gap-4">
-            {scrapingJob && scrapingJob.status === "finished"}
-            {articles && articles.map((article) => (
+          <div className="flex flex-col gap-4 items-center mb-4">
+            {allArticles && allArticles.map((article) => (
               <ArticleLink
                 key={article.id}
                 labellingEnabled={labellingEnabled}
@@ -93,6 +98,9 @@ const Feed: NextPage = () => {
                 linkActive
               />
             ))}
+            {articles && articles.length ? (
+              <p className="font-bold text-lg hover:text-gray-800 hover:cursor-pointer" onClick={() => setCursor(articles[articles.length - 1]?.id)}>load more</p>
+            ) : null}
           </div>
         </div>
       </div>

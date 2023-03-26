@@ -36,12 +36,6 @@ export const feedRouter = createTRPCRouter({
           }
         },
       });
-      if (!feed) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: "A feed for your account was not found"
-        });
-      }
       return feed;
     }),
   delete: protectedProcedure
@@ -88,7 +82,8 @@ export const feedRouter = createTRPCRouter({
             name: input.name,
             outlets: {
               create: input.outlets.map((outlet) => ({
-                prefix: outlet.prefix,
+                // remove forward slashes at beginning and end of prefix.
+                prefix: outlet.prefix.replace(/^\/+|\/+$/g, ''),
                 outletRef: outlet.outlet.ref,
                 outlet: {
                   connect: {
