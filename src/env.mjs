@@ -23,6 +23,8 @@ const server = z.object({
   // DISCORD_CLIENT_SECRET: z.string(),
   GOOGLE_ID: z.string().min(1),
   GOOGLE_SECRET: z.string().min(1),
+  SCRAPING_API_URL: z.string().url().min(1),
+  SCRAPING_API_KEY: z.string().min(1),
 });
 
 /**
@@ -47,6 +49,8 @@ const processEnv = {
   GOOGLE_ID: process.env.GOOGLE_ID,
   GOOGLE_SECRET: process.env.GOOGLE_SECRET,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+  SCRAPING_API_URL: process.env.SCRAPING_API_URL,
+  SCRAPING_API_KEY: process.env.SCRAPING_API_KEY,
 };
 
 // Don't touch the part below

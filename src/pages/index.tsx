@@ -35,7 +35,7 @@ const Home = () => {
         </div>
       </div>
       <div className="text-xl font-black absolute bottom-12 left-12 flex flex-col gap-3">
-        <Link href='/login'>login</Link>
+        <Link className="hover:text-gray-700 transition-all" href='/signin'>sign in</Link>
         <Link href='#' className='opacity-60'>mission</Link>
       </div>
     </div>

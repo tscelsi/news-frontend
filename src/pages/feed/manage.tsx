@@ -1,7 +1,8 @@
 import React from 'react'
-import { type NextPage } from 'next'
 import { useForm, type SubmitHandler, Controller, useFieldArray } from "react-hook-form";
 import classNames from 'classnames';
+import type { NextPage, GetServerSideProps } from 'next'
+import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import type { Outlet } from '@prisma/client';
 import Navbar from '~/components/Navbar';
@@ -29,6 +30,23 @@ type Option = {
 	label: string
 	value: Outlet
 }
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerAuthSession(ctx);
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+};
+
 
 const Manage: NextPage = () => {
 	const utils = api.useContext();

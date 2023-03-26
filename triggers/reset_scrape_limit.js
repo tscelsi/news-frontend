@@ -23,7 +23,7 @@ exports = function () {
   This function simply resets the API access count every day for rate limiting purposes.
   */
   const mongodb = context.services.get("oddschaserapi");
-  const users = mongodb.db("news").collection("users");
+  const users = mongodb.db("news").collection("User");
 
   return users.updateMany({}, { $set: { daily_scrape_count: 0 } });
 };

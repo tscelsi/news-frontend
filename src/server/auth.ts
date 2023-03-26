@@ -24,10 +24,11 @@ declare module "next-auth" {
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    daily_scrape_count: number
+      //   // ...other properties
+      //   // role: UserRole;
+  }
 }
 
 /**
@@ -37,13 +38,44 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
+    async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
         // session.user.role = user.role; <-- put other properties on the session here
       }
+      if (!user.daily_scrape_count) {
+        // trigger a scrape if the user has not scraped today
+        // making sure that the user has a feed and outlets in
+        // that feed.
+        const feed = await prisma.feed.findUnique({
+          where: { userId: user.id },
+          include: {
+            outlets: true,
+          },
+        })
+        if (feed && feed.outlets.length > 0) {
+          // trigger job
+          const res = await fetch(`${env.SCRAPING_API_URL}/feed/${feed.id}/run`, {
+            method: "POST",
+            headers: {
+              "x-api-key": env.SCRAPING_API_KEY,
+              "x-user-id": user.id,
+            }
+          })
+          if (res.status !== 202) {
+            console.error("error triggering scrape job", res)
+          }
+        }
+      }
       return session;
     },
+    redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
+    }
   },
   events: {
     async createUser({ user }) {
@@ -76,7 +108,8 @@ export const authOptions: NextAuthOptions = {
      */
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/signin",
+    newUser: "/feed/manage",
   }
 };
 

@@ -1,11 +1,28 @@
 import React from 'react'
+import { type GetServerSideProps } from 'next'
 import { api } from '~/utils/api'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import Navbar from '~/components/Navbar'
 import Button from '~/components/Button'
 import TextField from '~/components/TextField'
+import { getServerAuthSession } from '~/server/auth';
 
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerAuthSession(ctx);
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+};
 
 const Account = () => {
   const { data: session } = useSession()

@@ -20,7 +20,7 @@ const SessionAvatar = () => {
               <Link href="/account">Account</Link>
             </DropdownMenu.Item>
             <DropdownMenu.Item
-              onClick={() => { void signOut({ callbackUrl: "/home" }) }}
+              onClick={() => { void signOut({ callbackUrl: "/" }) }}
               className="bg-white flex justify-start pl-3 items-center h-12 border-b-4 border-black border-4 rounded-b-lg hover:bg-gray-100 hover:cursor-pointer focus:outline-none">
               Sign out
             </DropdownMenu.Item>

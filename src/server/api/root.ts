@@ -5,6 +5,7 @@ import { feedRouter } from "./routers/feed";
 import { outletRouter } from "./routers/outlet";
 import { labelRouter } from "./routers/label";
 import { userRouter } from "./routers/user";
+import { scrapingJobRouter } from "./routers/scrapingjob";
 /**
  * This is the primary router for your server.
  *
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   outlet: outletRouter,
   label: labelRouter,
   user: userRouter,
+  scrapingJob: scrapingJobRouter,
 });
 
 // export type definition of API
