@@ -1,11 +1,22 @@
 import React from 'react'
 import classNames from 'classnames';
-import type { ArticleLatest } from "~/server/api/routers/article";
 import type { LabelType } from '~/pages/feed';
 import { HiChevronDown, HiChevronUp } from "react-icons/hi";
+import type { Article } from '@prisma/client';
+
+type PartialArticle = Pick<Article,
+  | 'id'
+  | 'title'
+  | 'published'
+  | 'modified'
+  | 'outlet'
+  | 'author'
+  | 'body'
+  | 'url'
+  | 'prefix'>
 
 type Props = {
-  article: ArticleLatest
+  article: PartialArticle
   onClick?: React.MouseEventHandler
   isSelected?: boolean
   labellingEnabled?: boolean
@@ -16,7 +27,7 @@ type Props = {
 const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled, linkActive, ...rest }: Props) => {
   const [expanded, setExpanded] = React.useState(false);
 
-  const onLinkClick = (article: ArticleLatest) => {
+  const onLinkClick = (article: PartialArticle) => {
     // TODO: fingerprint
     if (window) {
       window.open(article.url, '_blank')
@@ -46,7 +57,7 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
     })}>
       <div className="flex flex-col">
         <p className="text-sm font-medium">
-          {article.outlet}
+          {article.outlet} - {article.prefix}
         </p>
         <div className="flex gap-1 items-center text-lg font-bold grow">
           <span onClick={linkActive ? () => onLinkClick(article) : undefined} className={classNames({

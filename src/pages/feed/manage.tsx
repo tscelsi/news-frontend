@@ -33,27 +33,27 @@ type Option = {
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getServerAuthSession(ctx);
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/signin',
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: { session },
-  };
+	const session = await getServerAuthSession(ctx);
+	if (!session) {
+		return {
+			redirect: {
+				destination: '/signin',
+				permanent: false,
+			},
+		};
+	}
+	return {
+		props: { session },
+	};
 };
 
 
 const Manage: NextPage = () => {
 	const utils = api.useContext();
 	const feeds = api.feed.list.useQuery(undefined, { refetchOnWindowFocus: false, refetchInterval: false });
+	const outlets = api.outlet.getAll.useQuery(undefined);
 	const updateFeed = api.feed.update.useMutation();
 	const createFeed = api.feed.create.useMutation();
-	const outlets = api.outlet.getAll.useQuery(undefined);
 	const feed = feeds.data ? feeds.data[0] : undefined;
 	const { register, reset, control, handleSubmit, watch, formState: { errors }, setError } = useForm<Inputs>({
 		defaultValues: {
@@ -118,92 +118,93 @@ const Manage: NextPage = () => {
 			<div className="flex justify-center items-center">
 				<div className=" bg-white border-4 border-black rounded-xl min-w-[66%] min-h-[450px]">
 					<div className="m-16">
-						{!feeds.isLoading && !outlets.isLoading ? (<form onSubmit={handleSubmit(onSubmit)}>
-							<div className="flex flex-col gap-2">
-								<span className="text-xs font-medium pl-2">Feed name</span>
-								<input type="text" className={classNames("pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-lg h-12 hover:shadow-blak transition-all", {
-									"font-bold": true,
-									"font-medium": !true,
-									"border-red-500": errors.name,
-									"hover:shadow-red": errors.name,
-									"focus:outline-red-500": errors.name,
-								})} {...register('name', {
-									minLength: 5,
-								})} />
-								{errors.name?.type === 'minLength' && <span className="text-red-500 text-xs" role="alert">Feed name must be greater than 4 characters</span>}
-							</div>
-							{/* <TextField  bolden label="Feed name" /> */}
-							<div className="">
-								{options.length && fields.map((field, index) => {
-									return (
-										<div key={field.id} className="mt-12 flex flex-col gap-4">
-											<div className="flex gap-2 items-center">
-												<h4 className="font-black text-xl">Outlet {index + 1}</h4>
-												<HiXCircle onClick={() => remove(index)} size={24} className="fill-red-500 hover:fill-red-400 hover:cursor-pointer" />
+						{!feeds.isLoading && !outlets.isLoading && options ? (
+							<form onSubmit={handleSubmit(onSubmit)}>
+								<div className="flex flex-col gap-2">
+									<span className="text-xs font-medium pl-2">Feed name</span>
+									<input type="text" className={classNames("pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-lg h-12 hover:shadow-blak transition-all", {
+										"font-bold": true,
+										"font-medium": !true,
+										"border-red-500": errors.name,
+										"hover:shadow-red": errors.name,
+										"focus:outline-red-500": errors.name,
+									})} {...register('name', {
+										minLength: 5,
+									})} />
+									{errors.name?.type === 'minLength' && <span className="text-red-500 text-xs" role="alert">Feed name must be greater than 4 characters</span>}
+								</div>
+								{/* <TextField  bolden label="Feed name" /> */}
+								<div className="">
+									{options.length && fields.map((field, index) => {
+										return (
+											<div key={field.id} className="mt-12 flex flex-col gap-4">
+												<div className="flex gap-2 items-center">
+													<h4 className="font-black text-xl">Outlet {index + 1}</h4>
+													<HiXCircle onClick={() => remove(index)} size={24} className="fill-red-500 hover:fill-red-400 hover:cursor-pointer" />
+												</div>
+												<div className="flex flex-col gap-2">
+													<span className="text-xs font-medium pl-2">Outlet</span>
+													<Controller
+														name={`outlets.${index}.outlet` as const}
+														control={control}
+														render={({ field: { onChange, value, ref } }) => (
+															<Select
+																ref={ref}
+																value={options.find((option: Option) => {
+																	return option.value.id === value.id
+																})}
+																onChange={val => onChange(val?.value)}
+																unstyled
+																placeholder="Select an option"
+																options={options}
+																// override option display style
+																styles={{
+																	option: () => ({
+																		display: 'flex',
+																	}),
+																	noOptionsMessage: () => ({
+																		display: 'flex'
+																	}),
+																}}
+																classNames={{
+																	control: (state) => classNames("hover:cursor-pointer bg-white px-3 border-black border-4 rounded-lg h-12 transition-all", {
+																		"hover:shadow-blak": !state.menuIsOpen,
+																		"hover:shadow-none": state.menuIsOpen,
+																		"rounded-b-none": state.menuIsOpen,
+																	}),
+																	option: () => "bg-white flex pl-4 justify-start items-center h-12 border-t-0 border-b-2 last:border-b-4 border-black border-4 last:rounded-b-lg hover:bg-gray-100 hover:cursor-pointer",
+																	placeholder: () => "text-gray-400 font-medium",
+																	noOptionsMessage: () => "bg-gray-300 flex pl-4 justify-start items-center h-12 border-t-0 text-gray-400 font-medium border-black border-4 rounded-b-lg",
+																}}
+															/>)} />
+												</div>
+												<div className="flex flex-col gap-2">
+													<span className="text-xs font-medium pl-2">Endpoint</span>
+													<input type="text" className={classNames("grow pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-lg h-12 hover:shadow-blak transition-all", {
+														"font-bold": false,
+														"font-medium": !false,
+														"border-red-500": errors?.outlets && errors.outlets[index],
+														"hover:shadow-red": errors?.outlets && errors.outlets[index],
+														"focus:outline-red-500": errors?.outlets && errors.outlets[index],
+													})} {...register(`outlets.${index}.prefix`, {
+														required: true,
+													})} />
+													{errors?.outlets && errors.outlets[index]?.prefix?.type === 'required' && <span className="text-red-500 text-xs" role="alert">Outlet endpoint must be filled out</span>}
+												</div>
+												<span className="text-sm text-gray-500">
+													{outlets?.data?.find((outlet) => (outlet.id === watch(`outlets.${index}.outlet`).id))?.base_url}{`/${watch(`outlets.${index}.prefix`)}`}
+												</span>
+												{/* <TextField {...register(`outlets.${index}.prefix`)} label="Endpoint" /> */}
 											</div>
-											<div className="flex flex-col gap-2">
-												<span className="text-xs font-medium pl-2">Outlet</span>
-												<Controller
-													name={`outlets.${index}.outlet` as const}
-													control={control}
-													render={({ field: { onChange, value, ref } }) => (
-														<Select
-															ref={ref}
-															value={options.find((option: Option) => {
-																return option.value.id === value.id
-															})}
-															onChange={val => onChange(val?.value)}
-															unstyled
-															placeholder="Select an option"
-															options={options}
-															// override option display style
-															styles={{
-																option: () => ({
-																	display: 'flex',
-																}),
-																noOptionsMessage: () => ({
-																	display: 'flex'
-																}),
-															}}
-															classNames={{
-																control: (state) => classNames("hover:cursor-pointer bg-white px-3 border-black border-4 rounded-lg h-12 transition-all", {
-																	"hover:shadow-blak": !state.menuIsOpen,
-																	"hover:shadow-none": state.menuIsOpen,
-																	"rounded-b-none": state.menuIsOpen,
-																}),
-																option: () => "bg-white flex pl-4 justify-start items-center h-12 border-t-0 border-b-2 last:border-b-4 border-black border-4 last:rounded-b-lg hover:bg-gray-100 hover:cursor-pointer",
-																placeholder: () => "text-gray-400 font-medium",
-																noOptionsMessage: () => "bg-gray-300 flex pl-4 justify-start items-center h-12 border-t-0 text-gray-400 font-medium border-black border-4 rounded-b-lg",
-															}}
-														/>)} />
-											</div>
-											<div className="flex flex-col gap-2">
-												<span className="text-xs font-medium pl-2">Endpoint</span>
-												<input type="text" className={classNames("grow pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-lg h-12 hover:shadow-blak transition-all", {
-													"font-bold": false,
-													"font-medium": !false,
-													"border-red-500": errors?.outlets && errors.outlets[index],
-													"hover:shadow-red": errors?.outlets && errors.outlets[index],
-													"focus:outline-red-500": errors?.outlets && errors.outlets[index],
-												})} {...register(`outlets.${index}.prefix`, {
-													required: true,
-												})} />
-												{errors?.outlets && errors.outlets[index]?.prefix?.type === 'required' && <span className="text-red-500 text-xs" role="alert">Outlet endpoint must be filled out</span>}
-											</div>
-											<span className="text-sm text-gray-500">
-												{outlets?.data?.find((outlet) => (outlet.id === watch(`outlets.${index}.outlet`).id))?.base_url}{`/${watch(`outlets.${index}.prefix`)}`}
-											</span>
-											{/* <TextField {...register(`outlets.${index}.prefix`)} label="Endpoint" /> */}
-										</div>
-									)
-								})}
-							</div>
-							<div className="mt-16 mb-8 text-center">
-								<a onClick={() => append({ prefix: "", outlet: dummyOutlet })} className="font-bold text-xl underline hover:cursor-pointer">Add another outlet +</a>
-							</div>
-							<Button type="submit">Save</Button>
-							{errors.outlets && errors.outlets.length === 0 && <span className="text-red-500 text-sm self-start" role="alert">{errors.outlets?.message ?? "You must create at least one outlet!"}</span>}
-						</form>) : <div>loading...</div>}
+										)
+									})}
+								</div>
+								<div className="mt-16 mb-8 text-center">
+									<a onClick={() => append({ prefix: "", outlet: dummyOutlet })} className="font-bold text-xl underline hover:cursor-pointer hover:text-gray-700">Add another outlet +</a>
+								</div>
+								<Button type="submit">Save</Button>
+								{errors.outlets && errors.outlets.length === 0 && <span className="text-red-500 text-sm self-start" role="alert">{errors.outlets?.message ?? "You must create at least one outlet!"}</span>}
+							</form>) : <div>loading...</div>}
 					</div>
 				</div>
 			</div>

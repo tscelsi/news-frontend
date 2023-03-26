@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const Feed: NextPage = () => {
   const [cursor, setCursor] = React.useState<string>();
   const { data: feed, isLoading } = api.feed.get.useQuery(undefined, { refetchInterval: false, refetchOnWindowFocus: false });
-  const { data: articles } = api.article.listPrivate.useQuery(!feed || !feed.outlets.length ? { cursor } : { feed, cursor }, { enabled: !!feed, keepPreviousData: true, refetchInterval: false, refetchOnWindowFocus: false });
+  const { data: articles } = api.article.listPrivate.useQuery(!feed || !feed.outlets.length ? { cursor } : { feed, cursor }, { enabled: !!feed, keepPreviousData: true });
   const [allArticles, setAllArticles] = React.useState<Article[]>([]);
   const { data: scrapingJob } = api.scrapingJob.get.useQuery();
   const [labellingEnabled, toggleLabelling] = React.useState(false);
@@ -67,8 +67,8 @@ const Feed: NextPage = () => {
       <Navbar
         buttonLeftRoute='/feed/manage'
         buttonLeftText='manage my feed'
-        buttonRightRoute={() => toggleLabelling(!labellingEnabled)}
-        buttonRightText={labellingEnabled && feed ? 'stop labelling' : feed ? 'start labelling' : undefined}
+        // buttonRightRoute={() => toggleLabelling(!labellingEnabled)}
+        // buttonRightText={labellingEnabled && feed ? 'stop labelling' : feed ? 'start labelling' : undefined}
         subHeader={scrapingJob ? <ScrapingJobStatus scrapingJob={scrapingJob} /> : undefined}
       >{feed?.name}</Navbar>
       {!isLoading && (!feed || !feed.outlets.length) && <div className="lg:w-1/2 ml-32 absolute top-0 h-screen flex flex-col gap-8 justify-center">
@@ -98,6 +98,8 @@ const Feed: NextPage = () => {
                 linkActive
               />
             ))}
+          </div>
+          <div className="w-full mb-6 flex justify-center">
             {articles && articles.length ? (
               <p className="font-bold text-lg hover:text-gray-800 hover:cursor-pointer" onClick={() => setCursor(articles[articles.length - 1]?.id)}>load more</p>
             ) : null}
