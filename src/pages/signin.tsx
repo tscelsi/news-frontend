@@ -1,6 +1,6 @@
 import React from 'react'
 import { signIn } from "next-auth/react"
-import Navbar from '~/components/Navbar'
+import Navbar from '~/components/molecules/Navbar'
 import Button from '~/components/Button'
 
 

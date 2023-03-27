@@ -3,9 +3,9 @@ import { type GetServerSideProps } from 'next'
 import { api } from '~/utils/api'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import Navbar from '~/components/Navbar'
+import Navbar from '~/components/molecules/Navbar'
 import Button from '~/components/Button'
-import TextField from '~/components/TextField'
+import TextField from '~/components/Form/TextField'
 import { getServerAuthSession } from '~/server/auth';
 
 

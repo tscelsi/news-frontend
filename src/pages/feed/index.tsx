@@ -4,11 +4,11 @@ import Link from 'next/link';
 import classNames from 'classnames';
 import { getServerAuthSession } from '~/server/auth';
 import { api } from "~/utils/api";
-import ArticleLink from '~/components/ArticleLink';
+import ArticleLink from '~/components/molecules/ArticleLink';
 import Label from '~/components/Label';
-import Navbar from '~/components/Navbar';
+import Navbar from '~/components/molecules/Navbar';
 import Button from '~/components/Button';
-import ScrapingJobStatus from '~/components/ScrapingJobStatus';
+import ScrapingJobStatus from '~/components/molecules/ScrapingJobStatus';
 import { type Article } from '@prisma/client';
 export type LabelType = "SAME_EVENT" | "SAME_STORY" | "SAME_TOPIC" | "DIFFERENT";
 

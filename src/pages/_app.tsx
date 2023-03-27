@@ -1,7 +1,7 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import SessionAvatar from "~/components/SessionAvatar";
+import SessionAvatar from "~/components/molecules/SessionAvatar";
 
 import { api } from "~/utils/api";
 

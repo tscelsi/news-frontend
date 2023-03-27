@@ -5,7 +5,7 @@ import type { NextPage, GetServerSideProps } from 'next'
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import type { Outlet } from '@prisma/client';
-import Navbar from '~/components/Navbar';
+import Navbar from '~/components/molecules/Navbar';
 import Select from 'react-select'
 import { HiXCircle } from "react-icons/hi";
 import Button from '~/components/Button';
@@ -112,6 +112,8 @@ const Manage: NextPage = () => {
 		value: outlet,
 	})) : []
 
+	console.log(watch('outlets.4.outlet'))
+
 	return (
 		<div className={classNames("font-satoshi min-h-screen bg-[#F43F5E]")}>
 			<Navbar buttonLeftText="back to feed" buttonLeftRoute='/feed'>Manage my feed</Navbar>
@@ -178,7 +180,7 @@ const Manage: NextPage = () => {
 																}}
 															/>)} />
 												</div>
-												<div className="flex flex-col gap-2">
+												{watch(`outlets.${index}.outlet`).name !== 'dummy' && <div className="flex flex-col gap-2"><div className="flex flex-col gap-2">
 													<span className="text-xs font-medium pl-2">Endpoint</span>
 													<input type="text" className={classNames("grow pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-lg h-12 hover:shadow-blak transition-all", {
 														"font-bold": false,
@@ -188,12 +190,14 @@ const Manage: NextPage = () => {
 														"focus:outline-red-500": errors?.outlets && errors.outlets[index],
 													})} {...register(`outlets.${index}.prefix`, {
 														required: true,
+														disabled: watch(`outlets.${index}.outlet`).name === 'dummy',
 													})} />
 													{errors?.outlets && errors.outlets[index]?.prefix?.type === 'required' && <span className="text-red-500 text-xs" role="alert">Outlet endpoint must be filled out</span>}
 												</div>
-												<span className="text-sm text-gray-500">
-													{outlets?.data?.find((outlet) => (outlet.id === watch(`outlets.${index}.outlet`).id))?.base_url}{`/${watch(`outlets.${index}.prefix`)}`}
-												</span>
+													<span className="text-sm text-gray-500">
+														{outlets?.data?.find((outlet) => (outlet.id === watch(`outlets.${index}.outlet`).id))?.base_url}{`/${watch(`outlets.${index}.prefix`)}`}
+													</span>
+												</div>}
 												{/* <TextField {...register(`outlets.${index}.prefix`)} label="Endpoint" /> */}
 											</div>
 										)

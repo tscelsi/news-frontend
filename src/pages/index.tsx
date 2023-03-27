@@ -3,7 +3,7 @@ import { type GetServerSideProps } from 'next'
 import Link from 'next/link'
 import { api } from '~/utils/api'
 import { useSession } from 'next-auth/react'
-import ArticleLink from '~/components/ArticleLink'
+import ArticleLink from '~/components/molecules/ArticleLink'
 import type { LabelType } from './feed'
 import { getServerAuthSession } from '~/server/auth';
 
