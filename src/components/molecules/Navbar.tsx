@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import classNames from 'classnames'
 
 type Props = {
   buttonLeftRoute?: string
@@ -7,11 +8,15 @@ type Props = {
   buttonLeftText?: string
   buttonRightText?: string
   subHeader?: React.ReactNode
+  smaller?: boolean
 } & React.PropsWithChildren
 
-const Navbar = ({ children, buttonLeftRoute, buttonRightRoute, buttonLeftText, buttonRightText, subHeader }: Props) => {
+const Navbar = ({ children, buttonLeftRoute, buttonRightRoute, buttonLeftText, buttonRightText, subHeader, smaller }: Props) => {
   return (
-    <div className="relative font-satoshi flex justify-center pt-16 pb-16 font-black z-50">
+    <div className={classNames("relative font-satoshi flex justify-center pt-16 font-black z-50", {
+      "pb-16": !smaller,
+      "pb-none": smaller,
+    })}>
       <div className="flex justify-between items-center w-4/5">
         <div className="flex-1 mr-auto">
           {buttonLeftRoute ? typeof buttonLeftRoute === 'function' ? <a onClick={buttonLeftRoute} className="hover:cursor-pointer">{buttonLeftText}</a> :

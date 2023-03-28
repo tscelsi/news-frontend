@@ -1,6 +1,6 @@
 ## Creating a feed
 
-Your feed is a collection of articles from different news outlets. You curate your feed so that it only
+Your feed is a collection of articles from different news sources. You create your feed so that it
 contains articles in areas that interest you. We help create you your feed by combining articles
 that are found on the web page at the endpoint you provide. So, if you provide a feed endpoint that
 is the economy section of the New York Times, we provide you with a feed of articles from the
