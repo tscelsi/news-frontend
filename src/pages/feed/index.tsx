@@ -34,7 +34,7 @@ const Feed: NextPage = () => {
   const { data: articles } = api.article.listPrivate.useQuery(!feed || !feed.outlets.length ? { cursor } : { feed, cursor }, { enabled: !!feed, keepPreviousData: true });
   const [allArticles, setAllArticles] = React.useState<Article[]>([]);
   const { data: scrapingJob } = api.scrapingJob.get.useQuery();
-  const [labellingEnabled, toggleLabelling] = React.useState(false);
+  const [labellingEnabled] = React.useState(false);
   const [currentLabel, setCurrentLabel] = React.useState<LabelType>("SAME_EVENT");
   const [labelledArticles, setLabelledArticles] = React.useState<string[]>([]);
   const toggleArticleToLabelled = (articleId: string) => {

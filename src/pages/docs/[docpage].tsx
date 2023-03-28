@@ -26,8 +26,6 @@ const docSections = [
   }
 ]
 
-const TAILWIND_LG_BREAKPOINT = 1024
-
 const DocPage = (props: Props) => {
   return (
     <div className="font-satoshi min-h-screen flex flex-col">

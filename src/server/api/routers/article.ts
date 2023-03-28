@@ -6,7 +6,7 @@ import {
 } from "~/server/api/trpc";
 import type { ArrayElement } from "~/utils/types";
 
-import { type inferRouterOutputs, TRPCError } from "@trpc/server";
+import { type inferRouterOutputs } from "@trpc/server";
 
 export const articleRouter = createTRPCRouter({
   /**

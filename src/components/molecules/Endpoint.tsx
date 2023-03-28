@@ -1,6 +1,7 @@
 import React from 'react'
 import { api } from '~/utils/api'
-import { HiCheck, HiQuestionMarkCircle, HiEmojiSad } from "react-icons/hi";
+import { HiCheck, HiX } from "react-icons/hi";
+import classNames from 'classnames';
 
 type Props = {
   outletId: string
@@ -31,10 +32,14 @@ const Endpoint = ({ outletId, endpoint, baseUrl, setEndpointValidity }: Props) =
 
   return baseUrl ? (
     <div className="flex gap-2 items-center justify-start ">
-      <span className="text-normal text-gray-500">
+      <span className={classNames("font-medium text-gray-500", {
+        "animate-pulse": isDebouncing || poke.isLoading,
+        "text-green-500": poke.data?.success,
+        "text-red-500": !poke.data?.success && !isDebouncing && !poke.isLoading,
+      })}>
         {baseUrl + "/" + endpoint}
       </span>
-      {isDebouncing || poke.isLoading ? <HiQuestionMarkCircle size={24} /> : poke.data?.success ? <HiCheck size={24} /> : <HiEmojiSad size={24} />}
+      {isDebouncing || poke.isLoading ? null : poke.data?.success ? <HiCheck className="text-green-500" size={24} /> : <HiX className="text-red-500" size={24} />}
     </div>
   ) : null
 }
