@@ -75,7 +75,7 @@ model ScrapingJob {
     // a user can only have a single scraping job document. A scraping job gets updated with articles
     // from the latest scrape and overrides existing articles.
     user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId       String    @db.ObjectId @unique
+    userId       String    @unique @db.ObjectId
     created_at   DateTime  @default(now())
     modified_at  DateTime  @default(now())
     completed_at DateTime?
@@ -83,22 +83,22 @@ model ScrapingJob {
 }
 
 model Article {
-    id             String        @id @map("_id") @db.ObjectId
-    outlet         String
-    url            String        @unique
-    title          String
-    body           String
-    created        DateTime
-    modified       DateTime
-    published      DateTime
-    scrape_time    DateTime
-    extra          String?
-    prefix         String
-    tags           String[]
-    author         String[]
-    wordCount      Int?
-    queryLabels    Label[]       @relation(name: "queryLabels")
-    answerLabels   Label[]       @relation(name: "answerLabels")
+    id           String   @id @map("_id") @db.ObjectId
+    outlet       String
+    url          String   @unique
+    title        String
+    body         String
+    created      DateTime
+    modified     DateTime
+    published    DateTime
+    scrape_time  DateTime
+    extra        String?
+    prefix       String
+    tags         String[]
+    author       String[]
+    wordCount    Int?
+    queryLabels  Label[]  @relation(name: "queryLabels")
+    answerLabels Label[]  @relation(name: "answerLabels")
 }
 
 model Feed {
@@ -125,7 +125,7 @@ model FeedOutlet {
 
 model Outlet {
     id          String       @id @default(auto()) @map("_id") @db.ObjectId
-    ref         String
+    ref         String       @unique
     name        String
     base_url    String
     outlets     FeedOutlet[]
