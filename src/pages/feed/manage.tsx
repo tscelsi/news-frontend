@@ -9,6 +9,7 @@ import Navbar from '~/components/molecules/Navbar';
 import Select from 'react-select'
 import { HiXCircle } from "react-icons/hi";
 import Button from '~/components/Button';
+import Endpoint from '~/components/molecules/Endpoint';
 
 type Inputs = {
 	name: string
@@ -61,6 +62,7 @@ const Manage: NextPage = () => {
 			outlets: [],
 		}
 	})
+	const [allEndpointsValid, setAllEndpointsValid] = React.useState(true)
 
 	React.useEffect(() => {
 		if (feed) {
@@ -84,8 +86,6 @@ const Manage: NextPage = () => {
 		}
 	});
 
-	console.log(errors)
-
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
 		// validate that there are no default outlets
 		const hasDefaultOutlet = data.outlets.some((outlet) => outlet.outlet.id === dummyOutlet.id)
@@ -93,6 +93,12 @@ const Manage: NextPage = () => {
 			setError("outlets", {
 				type: "manual",
 				message: "Please select an outlet"
+			})
+			return;
+		} else if (!allEndpointsValid) {
+			setError("root", {
+				type: "manual",
+				message: "Not all your endpoints are valid. Make sure they're all smiling before saving."
 			})
 			return;
 		}
@@ -112,8 +118,6 @@ const Manage: NextPage = () => {
 		value: outlet,
 	})) : []
 
-	console.log(watch('outlets.4.outlet'))
-
 	return (
 		<div className={classNames("font-satoshi min-h-screen bg-[#F43F5E]")}>
 			<Navbar buttonLeftText="back to feed" buttonLeftRoute='/feed'>Manage my feed</Navbar>
@@ -132,8 +136,10 @@ const Manage: NextPage = () => {
 										"focus:outline-red-500": errors.name,
 									})} {...register('name', {
 										minLength: 5,
+										required: true,
 									})} />
 									{errors.name?.type === 'minLength' && <span className="text-red-500 text-xs" role="alert">Feed name must be greater than 4 characters</span>}
+									{errors.name?.type === 'required' && <span className="text-red-500 text-xs" role="alert">Feed name is required!</span>}
 								</div>
 								{/* <TextField  bolden label="Feed name" /> */}
 								<div className="">
@@ -141,11 +147,11 @@ const Manage: NextPage = () => {
 										return (
 											<div key={field.id} className="mt-12 flex flex-col gap-4">
 												<div className="flex gap-2 items-center">
-													<h4 className="font-black text-xl">Outlet {index + 1}</h4>
+													<h4 className="font-black text-xl">Source {index + 1}</h4>
 													<HiXCircle onClick={() => remove(index)} size={24} className="fill-red-500 hover:fill-red-400 hover:cursor-pointer" />
 												</div>
 												<div className="flex flex-col gap-2">
-													<span className="text-xs font-medium pl-2">Outlet</span>
+													<span className="text-xs font-medium pl-2">Source</span>
 													<Controller
 														name={`outlets.${index}.outlet` as const}
 														control={control}
@@ -194,9 +200,7 @@ const Manage: NextPage = () => {
 													})} />
 													{errors?.outlets && errors.outlets[index]?.prefix?.type === 'required' && <span className="text-red-500 text-xs" role="alert">Outlet endpoint must be filled out</span>}
 												</div>
-													<span className="text-sm text-gray-500">
-														{outlets?.data?.find((outlet) => (outlet.id === watch(`outlets.${index}.outlet`).id))?.base_url}{`/${watch(`outlets.${index}.prefix`)}`}
-													</span>
+													<Endpoint setEndpointValidity={setAllEndpointsValid} outletId={watch(`outlets.${index}.outlet`).id} baseUrl={outlets?.data?.find((outlet) => (outlet.id === watch(`outlets.${index}.outlet`).id))?.base_url} endpoint={watch(`outlets.${index}.prefix`)} />
 												</div>}
 												{/* <TextField {...register(`outlets.${index}.prefix`)} label="Endpoint" /> */}
 											</div>
@@ -208,6 +212,7 @@ const Manage: NextPage = () => {
 								</div>
 								<Button type="submit">Save</Button>
 								{errors.outlets && errors.outlets.length === 0 && <span className="text-red-500 text-sm self-start" role="alert">{errors.outlets?.message ?? "You must create at least one outlet!"}</span>}
+								{errors.root && <span className="text-red-500 text-sm self-start" role="alert">{errors.root.message ?? "You must create at least one outlet!"}</span>}
 							</form>) : <div>loading...</div>}
 					</div>
 				</div>
