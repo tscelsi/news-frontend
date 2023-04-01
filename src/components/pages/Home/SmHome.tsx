@@ -15,12 +15,12 @@ const SmHome = () => {
           <h3 className="text-xl sm:text-start text-center font-black mt-2">See all your news in one <br /> place.</h3>
           <div className="w-full px-16 mt-8">
             <Link href='/signin'>
-              <Button variant="outlined">get started</Button>
+              <Button variant="filled">get started</Button>
             </Link>
           </div>
         </div>
-        <div className="w-full h-[700px] relative">
-          <Image className="" src="/mob_pileofnews.png" alt="pileofnews articles" fill />
+        <div className="mt-[-80px] w-full h-[600px] relative">
+          <Image className="object-cover object-top" src="/lg_pileofnews.png" alt="pileofnews articles" fill />
         </div>
       </div>
     </div>
