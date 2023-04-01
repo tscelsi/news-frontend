@@ -4,10 +4,6 @@ import { api } from '~/utils/api'
 import type { Session } from 'next-auth'
 import ArticleLink from '~/components/molecules/ArticleLink'
 import type { LabelType } from '~/pages/feed'
-import useWindowSize from '~/hooks/useWindowSize'
-import Navbar from '~/components/organisms/Navbar'
-import Button from '~/components/Button'
-import Image from 'next/image'
 
 
 const categories: LabelType[] = [
@@ -21,7 +17,6 @@ const categories: LabelType[] = [
 const random = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 const LgHome = ({ session }: { session: Session | null }) => {
-  const { breakpoint } = useWindowSize()
   const { data: latestArticles } = api.article.latest20.useQuery(undefined, { refetchOnWindowFocus: false, refetchInterval: false });
   return (
     <div className="font-satoshi min-h-screen bg-white">
