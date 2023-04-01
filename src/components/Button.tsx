@@ -10,9 +10,10 @@ type Props = {
   children: React.ReactNode
   onClick?: () => void
   disabled?: boolean
+  glass?: boolean
 } & React.HTMLAttributes<HTMLButtonElement>
 
-const Button = ({ variant = "filled", type = "button", children, onClick, textAlign, image, disabled, ...rest }: Props) => {
+const Button = ({ variant = "filled", type = "button", children, onClick, textAlign, image, disabled, glass, ...rest }: Props) => {
   return (
     <button type={type} onClick={onClick} className={classNames("p-4 w-full flex gap-2 justify-center items-center text-center text-lg h-14 bg-black font-bold rounded-xl hover:cursor-pointer ring-black ring-offset-1 hover:ring-2 transition-all", {
       "border-4 border-black": variant === "outlined",
@@ -24,6 +25,7 @@ const Button = ({ variant = "filled", type = "button", children, onClick, textAl
       "hover:cursor-default": disabled,
       "text-start": textAlign === "start",
       "text-end": textAlign === "end",
+      "shadow-glass": glass,
     })} {...rest} disabled={disabled}>
       {image && <Image src={image} height={24} width={24} alt="button-image" />}
       {children}
