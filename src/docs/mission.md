@@ -12,7 +12,7 @@ The [pileof.news](/src/pages/index.tsx) mission is simple:
 
 ### 1. journalistic integrity
 
-It's important to preserve the integrity and respect the effort of the journalists who create the articles that are displayed on this website. That's why authors are credited, the entire article contents isn't displayed, and an easy way to read more is provided by linking back to the original source.
+It's important to preserve the integrity and respect the effort of the journalists who create the articles that are listed on this website. That's why the authors are credited, the full article contents isn't displayed on our site and to read the full article we link back to the original source.
 
 ### 2. tech for good
 

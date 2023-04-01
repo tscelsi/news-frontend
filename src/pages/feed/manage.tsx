@@ -5,11 +5,12 @@ import type { NextPage, GetServerSideProps } from 'next'
 import { getServerAuthSession } from '~/server/auth';
 import { api } from '~/utils/api';
 import type { Outlet } from '@prisma/client';
-import Navbar from '~/components/molecules/Navbar';
+import Navbar from '~/components/organisms/Navbar';
 import Select from 'react-select'
 import { HiXCircle } from "react-icons/hi";
 import Button from '~/components/Button';
 import Endpoint from '~/components/molecules/Endpoint';
+import useWindowSize from '~/hooks/useWindowSize';
 
 type Inputs = {
 	name: string
@@ -51,6 +52,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 const Manage: NextPage = () => {
 	const utils = api.useContext();
+	const { breakpoint } = useWindowSize();
 	const feeds = api.feed.list.useQuery(undefined, { refetchOnWindowFocus: false, refetchInterval: false });
 	const outlets = api.outlet.getAll.useQuery(undefined);
 	const updateFeed = api.feed.update.useMutation();
@@ -62,6 +64,8 @@ const Manage: NextPage = () => {
 			outlets: [],
 		}
 	})
+
+	// outlet validation state
 	const [allEndpointsValid, setAllEndpointsValid] = React.useState(true)
 
 	React.useEffect(() => {
@@ -120,15 +124,19 @@ const Manage: NextPage = () => {
 
 	return (
 		<div className={classNames("font-satoshi min-h-screen bg-[#F43F5E]")}>
-			<Navbar buttonLeftText="back to feed" buttonLeftRoute='/feed'>Manage my feed</Navbar>
-			<div className="flex justify-center items-center">
-				<div className=" bg-white border-4 border-black rounded-xl min-w-[66%] min-h-[450px]">
-					<div className="m-16">
+			{breakpoint !== 'sm' ? <Navbar type='lg' props={{
+				buttonLeftText: "back to feed",
+				buttonLeftRoute: '/feed'
+			}}>Manage my feed</Navbar> :
+				<Navbar type='sm'>Manage my feed</Navbar>}
+			<div className="mt-6 flex justify-center items-center">
+				<div className=" bg-white border-4 border-black rounded-xl w-full mx-8 lg:min-w-[66%] lg:min-h-[450px]">
+					<div className="lg:p-16 p-8">
 						{!feeds.isLoading && !outlets.isLoading && options ? (
 							<form onSubmit={handleSubmit(onSubmit)}>
 								<div className="flex flex-col gap-2">
 									<span className="text-xs font-medium pl-2">Feed name</span>
-									<input type="text" className={classNames("pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-lg h-12 hover:shadow-blak transition-all", {
+									<input type="text" className={classNames("pl-3 max-w-xs focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-xl h-12 hover:shadow-blak transition-all", {
 										"font-bold": true,
 										"font-medium": !true,
 										"border-red-500": errors.name,
@@ -145,7 +153,7 @@ const Manage: NextPage = () => {
 								<div className="">
 									{options.length && fields.map((field, index) => {
 										return (
-											<div key={field.id} className="mt-12 flex flex-col gap-4">
+											<div key={field.id} className="lg:mt-12 mt-8 flex flex-col gap-4">
 												<div className="flex gap-2 items-center">
 													<h4 className="font-black text-xl">Source {index + 1}</h4>
 													<HiXCircle onClick={() => remove(index)} size={24} className="fill-red-500 hover:fill-red-400 hover:cursor-pointer" />
@@ -175,7 +183,7 @@ const Manage: NextPage = () => {
 																	}),
 																}}
 																classNames={{
-																	control: (state) => classNames("hover:cursor-pointer bg-white px-3 border-black border-4 rounded-lg h-12 transition-all", {
+																	control: (state) => classNames("hover:cursor-pointer bg-white px-3 border-black border-4 rounded-xl h-12 transition-all", {
 																		"hover:shadow-blak": !state.menuIsOpen,
 																		"hover:shadow-none": state.menuIsOpen,
 																		"rounded-b-none": state.menuIsOpen,
@@ -188,7 +196,7 @@ const Manage: NextPage = () => {
 												</div>
 												{watch(`outlets.${index}.outlet`).name !== 'dummy' && <div className="flex flex-col gap-2"><div className="flex flex-col gap-2">
 													<span className="text-xs font-medium pl-2">Endpoint</span>
-													<input type="text" className={classNames("grow pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-lg h-12 hover:shadow-blak transition-all", {
+													<input type="text" className={classNames("grow pl-3 focus:outline focus:outline-offset-2 focus:shadow-none focus:outline-black border-black border-4 rounded-xl h-12 hover:shadow-blak transition-all", {
 														"font-bold": false,
 														"font-medium": !false,
 														"border-red-500": errors?.outlets && errors.outlets[index],

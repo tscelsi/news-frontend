@@ -3,7 +3,8 @@ import { type GetServerSideProps } from 'next'
 import { api } from '~/utils/api'
 import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import Navbar from '~/components/molecules/Navbar'
+import Navbar from '~/components/organisms/Navbar'
+import useWindowSize from '~/hooks/useWindowSize'
 import Button from '~/components/Button'
 import TextField from '~/components/Form/TextField'
 import { getServerAuthSession } from '~/server/auth';
@@ -28,6 +29,7 @@ const Account = () => {
   const { data: session } = useSession()
   const { register, reset } = useForm()
   const deleteAccount = api.user.delete.useMutation()
+  const { breakpoint } = useWindowSize()
 
   React.useEffect(() => {
     if (session?.user) {
@@ -44,10 +46,14 @@ const Account = () => {
 
   return (
     <div className="font-satoshi min-h-screen bg-[#F43F5E]">
-      <Navbar buttonLeftText="back to feed" buttonLeftRoute='/feed'>My Account</Navbar>
+      {breakpoint !== 'sm' ? <Navbar type='lg' props={{
+        buttonLeftText: "back to feed",
+        buttonLeftRoute: '/feed'
+      }}>My Account</Navbar> :
+        <Navbar type='sm'>My Account</Navbar>}
       <div className="flex justify-center items-center">
-        <div className="w-2/5 bg-white border-4 border-black rounded-xl">
-          <div className="mx-16 mt-16 mb-12">
+        <div className="lg:w-2/5 w-full mt-6 m-8 bg-white border-4 border-black rounded-xl">
+          <div className="mx-8 mt-8 lg:mx-16 lg:mt-16 mb-12">
             <div className="flex flex-col gap-4">
               <TextField label="Name" editable={false} {...register('name')} />
               <TextField label="Email" editable={false} {...register('email')} />

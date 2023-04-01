@@ -2,6 +2,7 @@ import React from 'react'
 import { api } from '~/utils/api'
 import { HiCheck, HiX } from "react-icons/hi";
 import classNames from 'classnames';
+import useWindowSize from '~/hooks/useWindowSize'
 
 type Props = {
   outletId: string
@@ -11,6 +12,7 @@ type Props = {
 }
 
 const Endpoint = ({ outletId, endpoint, baseUrl, setEndpointValidity }: Props) => {
+  const { breakpoint } = useWindowSize()
   const [debouncedUrl, setDebouncedUrl] = React.useState(endpoint)
   const [isDebouncing, setIsDebouncing] = React.useState(false)
   const poke = api.outlet.poke.useQuery({ id: outletId, endpoint: debouncedUrl }, { refetchInterval: false, refetchOnWindowFocus: false, enabled: endpoint !== "" })
@@ -39,7 +41,9 @@ const Endpoint = ({ outletId, endpoint, baseUrl, setEndpointValidity }: Props) =
       })}>
         {baseUrl + "/" + endpoint}
       </span>
-      {isDebouncing || poke.isLoading ? null : poke.data?.success ? <HiCheck className="text-green-500" size={24} /> : <HiX className="text-red-500" size={24} />}
+      {breakpoint !== 'sm' && <div>
+        {isDebouncing || poke.isLoading ? null : poke.data?.success ? <HiCheck className="text-green-500" size={24} /> : <HiX className="text-red-500" size={24} />}
+      </div>}
     </div>
   ) : null
 }
