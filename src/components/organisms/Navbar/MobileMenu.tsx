@@ -44,7 +44,7 @@ const menuItems: MenuItem[] = [
     },
     {
         name: "sign out",
-        path: () => void signOut(),
+        path: () => void signOut({ callbackUrl: "/" }),
         onlyShowAuthed: true,
         onlyShowNotAuthed: false,
     },
