@@ -29,16 +29,16 @@ function useWindowSize(): WindowSizeReturns {
         width: window.innerWidth,
         height: window.innerHeight,
       })
-      if (window.innerWidth > 640) {
-        setBreakpoint('md')
-      } else if (window.innerWidth > 768) {
-        setBreakpoint('lg')
-      } else if (window.innerWidth > 1024) {
-        setBreakpoint('xl')
-      } else if (window.innerWidth > 1280) {
-        setBreakpoint('2xl')
-      } else {
+      if (window.innerWidth < 640) {
         setBreakpoint('sm')
+      } else if (window.innerWidth < 768) {
+        setBreakpoint('md')
+      } else if (window.innerWidth < 1024) {
+        setBreakpoint('lg')
+      } else if (window.innerWidth < 1280) {
+        setBreakpoint('xl')
+      } else {
+        setBreakpoint('2xl')
       }
     }
 

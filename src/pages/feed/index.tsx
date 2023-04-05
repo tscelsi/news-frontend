@@ -11,6 +11,7 @@ import Button from '~/components/Button';
 import ScrapingJobStatus from '~/components/molecules/ScrapingJobStatus';
 import { type Article } from '@prisma/client';
 import useWindowSize from '~/hooks/useWindowSize';
+import LoadingSVG from '~/components/Loading';
 
 export type LabelType = "SAME_EVENT" | "SAME_STORY" | "SAME_TOPIC" | "DIFFERENT";
 
@@ -34,7 +35,7 @@ const Feed: NextPage = () => {
   const { breakpoint } = useWindowSize();
   const [cursor, setCursor] = React.useState<string>();
   const { data: feed, isLoading } = api.feed.get.useQuery(undefined, { refetchInterval: false, refetchOnWindowFocus: false });
-  const { data: articles } = api.article.listPrivate.useQuery(!feed || !feed.outlets.length ? { cursor } : { feed, cursor }, { enabled: !!feed, keepPreviousData: true });
+  const { data: articles, isLoading: articlesLoading } = api.article.listPrivate.useQuery(!feed || !feed.outlets.length ? { cursor } : { feed, cursor }, { enabled: !!feed, keepPreviousData: true });
   const [allArticles, setAllArticles] = React.useState<Article[]>([]);
   const { data: scrapingJob } = api.scrapingJob.get.useQuery();
   const [labellingEnabled] = React.useState(false);
@@ -82,7 +83,7 @@ const Feed: NextPage = () => {
         </Link>
       </div>}
       <div className="mt-6 flex flex-col items-center justify-start">
-        <div className="lg:w-1/2 mx-8 flex flex-col items-start justify-center gap-4">
+        <div className="sm:w-1/2 mx-8 flex flex-col items-start justify-center gap-4">
           {labellingEnabled &&
             <div className="w-full flex gap-4 mb-9">
               <Label boundLabel='SAME_EVENT' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
@@ -90,8 +91,8 @@ const Feed: NextPage = () => {
               <Label boundLabel='SAME_TOPIC' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
               <Label boundLabel='DIFFERENT' currentLabel={currentLabel} setCurrentLabel={setCurrentLabel} />
             </div>}
-          <div className="flex flex-col gap-4 items-center mb-4">
-            {allArticles && allArticles.map((article) => (
+          <div className="flex flex-col gap-4 items-center justify-center mb-4 w-full">
+            {!articlesLoading ? allArticles && allArticles.map((article) => (
               <ArticleLink
                 key={article.id}
                 labellingEnabled={labellingEnabled}
@@ -101,7 +102,9 @@ const Feed: NextPage = () => {
                 article={article}
                 linkActive
               />
-            ))}
+            )) : <div className="w-full flex justify-center">
+              <LoadingSVG />
+            </div>}
           </div>
           <div className="w-full mb-6 flex justify-center">
             {articles && articles.length ? (

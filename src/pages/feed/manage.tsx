@@ -11,6 +11,8 @@ import { HiXCircle } from "react-icons/hi";
 import Button from '~/components/Button';
 import Endpoint from '~/components/molecules/Endpoint';
 import useWindowSize from '~/hooks/useWindowSize';
+import LoadingSVG from '~/components/Loading';
+
 
 type Inputs = {
 	name: string
@@ -130,7 +132,7 @@ const Manage: NextPage = () => {
 			}}>Manage my feed</Navbar> :
 				<Navbar type='sm'>Manage my feed</Navbar>}
 			<div className="mt-6 flex justify-center items-center">
-				<div className=" bg-white border-4 border-black rounded-xl w-full mx-8 lg:min-w-[66%] lg:min-h-[450px]">
+				<div className="sm:w-1/2 bg-white border-4 border-black rounded-xl w-full mx-8 lg:min-h-[450px]">
 					<div className="lg:p-16 p-8">
 						{!feeds.isLoading && !outlets.isLoading && options ? (
 							<form onSubmit={handleSubmit(onSubmit)}>
@@ -221,7 +223,7 @@ const Manage: NextPage = () => {
 								<Button type="submit">Save</Button>
 								{errors.outlets && errors.outlets.length === 0 && <span className="text-red-500 text-sm self-start" role="alert">{errors.outlets?.message ?? "You must create at least one outlet!"}</span>}
 								{errors.root && <span className="text-red-500 text-sm self-start" role="alert">{errors.root.message ?? "You must create at least one outlet!"}</span>}
-							</form>) : <div>loading...</div>}
+							</form>) : <div><LoadingSVG /></div>}
 					</div>
 				</div>
 			</div>

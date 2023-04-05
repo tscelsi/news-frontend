@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import classNames from 'classnames'
+import ContentLoader from "react-content-loader"
 
 export type LgNavbarProps = {
   buttonLeftRoute?: string
