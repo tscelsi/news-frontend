@@ -19,19 +19,23 @@ export const docPages = [{
   name: "Mission",
   path: 'mission',
   disabled: true,
-  colour: 'bg-red-500',
+  // colour: 'bg-red-500',
 },
 {
   name: "How it works",
   path: 'how-it-works',
   disabled: false,
-  colour: 'bg-blue-500',
+  // colour: 'bg-blue-500',
 },
 {
   name: "Roadmap",
   path: 'roadmap',
   disabled: false,
-  colour: 'bg-green-500',
+  // colour: 'bg-green-500',
+}, {
+  name: "Design",
+  path: 'design',
+  disabled: false,
 }]
 
 
@@ -48,11 +52,11 @@ const DocPage = (props: Props) => {
       }} /> :
         <Navbar type='sm' />}
       <div>
-        <div className="flex gap-2 items-center justify-center pt-4">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 items-center justify-center pt-4">
           {docPages.map(page => (
-            <Link href={`/docs/${page.path}`} key={page.name}>
+            <Link className="" href={`/docs/${page.path}`} key={page.name}>
               <div key={page.name} className="flex flex-col gap-3 items-center justify-center">
-                <p className={classNames("hover:pt-1 hover:opacity-80 hover:text-red-500 pt-2 rounded-lg transition-all px-2 py-1 font-bold text-center", {
+                <p className={classNames("hover:pl-1 sm:hover:pl-2 sm:hover:pt-1 hover:opacity-80 hover:text-red-500 pt-2 rounded-lg transition-all px-2 py-1 font-bold text-center", {
                   "text-red-500": router.asPath === `/docs/${page.path}`,
                 })}>{page.name}</p>
               </div>
