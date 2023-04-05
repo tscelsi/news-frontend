@@ -1,28 +1,28 @@
-# Create T3 App
+# pileof.news frontend
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+**The pileof.news scraping engine can be found [here](https://github.com/tscelsi/news-scraping).**
 
-## What's next? How do I make an app with this?
+Welcome to the pileof.news frontend repository. The frontend is powered by the [T3 Stack](https://create.t3.gg/).
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
+The core components of the T3 Stack are:
 - [Next.js](https://nextjs.org)
 - [NextAuth.js](https://next-auth.js.org)
 - [Prisma](https://prisma.io)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+More information can be found [here](https://create.t3.gg/).
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Core repository components
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+The repository follows the typical NextJS structure, i.e. src/pages directory contains all the pages of the application etc. For more information see [here](https://nextjs.org).
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- `prisma/` - Contains the Prisma schema that is connected to a MongoDB database instance.
+- `triggers/` - Contains a MongoDB trigger that is used to reset the daily scrape limit for users. This essentially limits users to triggering 1 scrape of their news articles per day.
+- `src/docs/` - Contains documentation about the project.
+- `src/fonts/` - Contains the great Satoshi font. HIGHLY RECOMMEND.
 
-## How do I deploy this?
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Frontend concepts
+
+A user has access to a news feed. Every day, we want to update that feed. We update the feed by scraping the news articles from the websites that the user has added to their feed. We then store those articles in MongoDB and display them to the user by retrieving them from the database. Every day when a user first interacts with the app, they trigger a scrape. At the moment, a user can only trigger 1 scrape per day.

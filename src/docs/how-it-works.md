@@ -1,4 +1,6 @@
-## Creating a feed
+## How it works
+
+### Creating a feed
 
 Your feed is a collection of articles from different news sources. You create your feed so that it
 contains articles in areas that interest you. We help create you your feed by combining articles
@@ -21,4 +23,4 @@ When creating or managing your feed, you need to specify the *sections* that con
 We click 'Save' and the next time [our feed](/feed) updates, we will see articles from the New York Times from the *sections* we specified.
 
 
-In reality, the great part doesn't come by limiting yourself to only articles from The New York Times. You can add different sources to your feed, like the BBC or Al Jazeera and identify different *sections* from their websites to create a feed of articles from your most-read news sources. We have lots of ideas to make your feed even *more* interesting and useful. Take a look at our [roadmap](/roadmap) to see what other interesting features are in the pipeline.
+In reality, the great part doesn't come by limiting yourself to only articles from The New York Times. You can add different sources to your feed, like the BBC or Al Jazeera and identify different *sections* from their websites to create a feed of articles from your most-read news sources. We have lots of ideas to make your feed even *more* interesting and useful. Take a look at our [roadmap](/docs/roadmap) to see what other interesting features are in the pipeline.

@@ -4,7 +4,6 @@ The [pileof.news](/src/pages/index.tsx) mission is simple:
 
 1. Make it easy to maintain a well-rounded, informed perspective on the news.
 2. Reduce the amount of lost time spent finding interesting news media.
-3. Begin to collect and distribute openly (where possible) a dataset of news media content for research purposes.
 
 ---
 
@@ -22,4 +21,4 @@ I believe that technology should be used harmoniously with humanity as a way to 
 
 ### 3. data transparency
 
-I want to be transparent about how data is collected and used on this site. As such, most/all of the code used to create both the engine behind the site and the site itself are open source.
+I want to be transparent about how data is collected and used on this site. As such, most/all of the code used to create both the engine behind the site and the site itself are [open source](https://github.com/tscelsi/news-frontend).

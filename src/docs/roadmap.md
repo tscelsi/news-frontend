@@ -1,16 +1,16 @@
 ## Roadmap
 
-[pileof.news](#) was created as a hobby project, with the idea to combine facets of natural language processing, machine learning, web development and UI/UX design into one useful and interesting arrangement. If you would like to contribute to the project, it is publically available on [github](). If reading some of the following excites you, or you have other great ideas, or if you just want to chat more about it, you can reach out to me by any of the contact methods [here](#).
+[pileof.news](#) was created as a hobby project, with the idea to combine facets of natural language processing, machine learning, web development and UI/UX design into one useful and interesting arrangement. If you would like to contribute to the project, it is publically available on [github](https://github.com/tscelsi/news-frontend). If reading some of the following excites you, or you have other great ideas, or if you just want to chat more about it, you can reach out to me by any of the contact methods [here](/contact).
 
 The project is still in its infancy, but the following are some ambitious features that are planned for the future:
 
 - **User feedback! (web-dev, UI/UX)**
   
-  We want to hear from you. What news sources are missing? What are some of the features that are most interesting to you? An easy-to-use feedback system is essential to the website so that we can continue to improve it.
+  We want to hear from you. What news sources are missing? What are some of the features that are most interesting to you? An easy-to-use feedback system is essential to the website so that it can continually be improved.
 
-- **More news sources!**
+- **More sources!**
   
-  There's always room for more news sources to give users a more varied and interesting set of websites to see articles from. In the future we may also look into providing articles from blogs like Medium, or even from social media platforms like Twitter.
+  There's always room for more sources to give users a more varied and interesting set of websites to see articles from. In the future we may also look into providing articles from blogs like Medium, or even from social media platforms like Twitter.
 
 - **Multiple feeds per-account (web-dev, UI/UX)**
   
