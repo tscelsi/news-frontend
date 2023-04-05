@@ -19,6 +19,12 @@ const menuItems: MenuItem[] = [
         onlyShowNotAuthed: false,
     },
     {
+        name: "manage my feed",
+        path: "/feed/manage",
+        onlyShowAuthed: true,
+        onlyShowNotAuthed: false,
+    },
+    {
         name: "docs",
         path: "/docs/mission",
         onlyShowAuthed: false,
