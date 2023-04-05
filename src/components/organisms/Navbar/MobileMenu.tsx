@@ -65,14 +65,16 @@ const MobileMenu = () => {
         if (item.onlyShowNotAuthed && session?.user) return null
         if (typeof item.path === "string") {
             return (
-                <Link onClick={toggleMenu} className="first:mt-0 mt-12" key={key} href={item.path}>
-                    <div className="text-whyte flex items-center hover:cursor-pointer hover:text-violet-100 transition-colors">
-                        {item.name}
-                    </div>
-                </Link>
+                <div className="mt-2">
+                    <Link onClick={toggleMenu} key={key} href={item.path}>
+                        <div className="text-whyte flex items-center hover:cursor-pointer hover:text-violet-100 transition-colors">
+                            {item.name}
+                        </div>
+                    </Link>
+                </div>
             )
         }
-        return (<div key={key} onClick={item.path} className="text-whyte flex items-center hover:cursor-pointer hover:text-violet-100 transition-colors">
+        return (<div key={key} onClick={item.path} className="mt-2 text-whyte flex items-center hover:cursor-pointer hover:text-violet-100 transition-colors">
             {item.name}
         </div>)
     }
@@ -80,7 +82,7 @@ const MobileMenu = () => {
     return (
         <div className="fixed px-8 py-6 z-50 top-0 left-0 h-full w-full flex flex-col bg-white font-satoshi">
             <HiOutlineX onClick={toggleMenu} size={32} />
-            <div className="font-medium">
+            <div className="font-medium mt-8">
                 {menuItems.map((item, idx) => renderLink(idx, item))}
             </div>
             <div className="grow flex flex-col justify-end">
