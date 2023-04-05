@@ -24,6 +24,14 @@ type Props = {
   linkActive?: boolean
 }
 
+const formatDate = (date: Date) => {
+  // convert to something like: January 3rd, 2023
+  const month = date.toLocaleString('default', { month: 'long' });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${month} ${day}${day === 1 ? 'st' : day === 2 ? 'nd' : day === 3 ? 'rd' : 'th'}, ${year}`;
+}
+
 const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled, linkActive, ...rest }: Props) => {
   const [expanded, setExpanded] = React.useState(false);
 
@@ -59,20 +67,21 @@ const ArticleLink = ({ article, isSelected, labellingCategory, labellingEnabled,
         <p className="text-sm font-medium">
           {article.outlet} - {article.prefix}
         </p>
-        <div className="flex gap-1 items-center text-lg font-bold grow">
+        <div className="mt-2 flex gap-1 items-center text-lg font-bold grow">
           <span onClick={linkActive ? () => onLinkClick(article) : undefined} className={classNames({
             "hover:cursor-pointer": linkActive,
             "hover:underline": linkActive,
           })}>{article.title}</span>
         </div>
-        <div className={classNames("mt-2 mb-4", {
-          "hidden": !expanded || labellingEnabled,
-        })}>
+        {expanded && article.author.length !== 0 && <div className={classNames("text-sm font-semibold mt-2 mb-2")}>
+          <p>by: {article.author.join(" & ")}</p>
+        </div>}
+        {expanded && <div className={classNames("mt-2 mb-2")}>
           {article.body.substring(0, 150)}...
-        </div>
-        <div className="flex gap-4 text-sm text-gray-700">
-          <p>{article.modified.toLocaleDateString()} {article.modified.toLocaleTimeString()}</p>
-          {article.author.length !== 0 && <p>{article.author.join(" & ")}</p>}
+        </div>}
+        <div className="text-sm text-gray-700 mt-2">
+          <p>{formatDate(article.modified)} {article.modified.toLocaleTimeString()}</p>
+          {/* {article.author.length !== 0 && <p>{article.author.join(" & ")}</p>} */}
         </div>
       </div>
       {!labellingEnabled && <div className="flex grow self-start justify-end">
